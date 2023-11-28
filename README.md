@@ -4,12 +4,24 @@
 <a href="https://www.buymeacoffee.com/SirGoodenough"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=SirGoodenough&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00" width=auto, height=30/></a>
 <base target="_blank">
 
-# Availability-Template
+# Color-Multi-Tool
 
-Custom Template for checking the availability of an entity.
-The main reason for using this template is not because it's complicated, it's because availability is something you will be using over and over when you are dealing with sensors, so being able to repeat the same action over and over is better if there is 1 place in your project the code exists.
+Custom Template for doing things with colors. It started out by wanting a way to get a random color name off of the official color name list. Then I decided it needed a way to pull random rgb, hs, and xy colors as well. I then decided to build the conversions between all the types.
+
+The conversions are derived from HA's own color conversion code with the exception of rgb2hs.  Home Assistant uses the built-in python module to do that in core, so I pulled the code for that from another source.
+
+I folowwed the conversion code as close as I could, but I find that if you convert a color then convert it vack, it drifts quite a bit.
+
+I welcom the PR from anyone that can inprove any of this code.  It is'functional' but not optimizes at this point, and there are things I want to do with it.  However I wanted to release it for others to collab at this point.
 
 This requires HomeAssistant version 2023.11.0 or greater due to the use of the list test in the code.
+
+# TO-DO List
+
+* Error checking inputs for range
+* Add ```Display closest color name given an RGB```
+* Clean-up code, add shortcuts on redundancies
+* Push to Hacs released
 
 # Installation
 
