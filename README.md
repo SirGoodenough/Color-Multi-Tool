@@ -1,5 +1,5 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/custom-components/hacs)
-![Version](https://img.shields.io/github/v/release/SirGoodenough/Availability-Template)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/custom-components/hacs)
+![Version](https://img.shields.io/github/v/release/SirGoodenough/Color-Multi-Tool)
 
 <a href="https://www.buymeacoffee.com/SirGoodenough"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=SirGoodenough&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00" width=auto, height=30/></a>
 <base target="_blank">
@@ -10,23 +10,26 @@ Custom Template for doing things with colors. It started out by wanting a way to
 
 The conversions are derived from HA's own color conversion code with the exception of rgb2hs.  Home Assistant uses the built-in python module to do that in core, so I pulled the code for that from another source.
 
-I folowwed the conversion code as close as I could, but I find that if you convert a color then convert it vack, it drifts quite a bit.
+I followed the conversion code as close as I could, but I find that if you convert a color then convert it back, it drifts quite a bit.
 
-I welcom the PR from anyone that can inprove any of this code.  It is'functional' but not optimizes at this point, and there are things I want to do with it.  However I wanted to release it for others to collab at this point.
+I welcome the PR from anyone that can improve any of this code.  It is 'functional' but not optimized at this point, and there are things I want to do with it.  However I wanted to release it for others to collab at this point.
 
 This requires HomeAssistant version 2023.11.0 or greater due to the use of the list test in the code.
 
 # TO-DO List
 
-* Error checking inputs for range
-* Add ```Display closest color name given an RGB```
-* Clean-up code, add shortcuts on redundancies
-* Push to Hacs released
+* Push to HACS Custom.
+* Error checking inputs for range.
+* Add ```Display closest color name to a given RGB```.
+* Clean-up code, add shortcuts on redundancies.
+* Return a list of all the official color names.
+* Push to Hacs released.
 
 # Installation
 
-Install this in HACS or download the `availability_template.jinja` from this repository and place the files into your `config\custom_templates` directory.
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SirGoodenough&repository=Availability-Template&category=template)
+Install this in HACS or download the `color_multi_tool.jinja`. From this repository and place the files into your `config\custom_templates` directory.
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SirGoodenough&repository=Color-Multi-Tool&category=template)
 
 #### If you cannot see templates in your HACS listing
 
@@ -37,70 +40,299 @@ You *may* need to enable 'experimental features' mode. To do this find the HACS 
 Before you report a 'Bug', you need to make sure you have read the accompanying Descriptions on the templates and this README and have followed all the settings required here.
 This is important because if these instructions are not followed, you will likely have a bad day and be forced to contact me for help.  Not that I don't want to help, but personal interaction takes me a while to respond and is generally non-productive.
 
-Another good thing to do before you ask for help is try testing what you have in the Developer Tools Template Tab in Home Assistant. There you can adjust this and that until you figure out the answer to your question yourself.  [![Open your Home Assistant instance and show your template developer tools.](https://my.home-assistant.io/badges/developer_template.svg)](https://my.home-assistant.io/redirect/developer_template/)
+Another good thing to do before you ask for help is try testing what you have in the Developer Tools Template Tab in Home Assistant. There you can adjust this and that until you figure out the answer to your question yourself.  
+
+[![Open your Home Assistant instance and show your template developer tools.](https://my.home-assistant.io/badges/developer_template.svg)](https://my.home-assistant.io/redirect/developer_template/)
 
 *********************
 
-# Availability Test
+# Random Color Name
 
-## `avail([entity1, entity2, /])`
+## `random_name()`
 
-This expects a list of entities.
+  This will return one of the official color names recognized by Home Assistant lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py and the Official CSS3 colors from w3.org: https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4    
+  
+  Names do not have spaces in them so that we can compare against requests more easily (by removing spaces from the requests as well).
+  
+  This lets "dark seagreen" and "dark sea green" both match the same color "darkseagreen".
+  
+### SAMPLE USAGE:
 
-- The number of entities are counted.
-- The number of entities that are NOT unknown, unavailable, empty, or none are counted.
-- If the 2 counts are the same, true is returned, else false, defaults to false.
+  ```jinja
+    {% from 'color_multi_tool.jinja' import random_name %}
+    {{- random_name() -}}
+  ```
 
-### REMEMBER!!
+*********************
 
-> This always returns text, so cast to bool on the other end to be certain of the result.
->
-> Use of the - character in the return template ensures no unwanted spacing is pulled back with your answer.
+# Random xy Color
 
-### Examples
+## `random_xy()`
 
-Generically, this can be dropped into many templates to be sure the result will render properly.
+  This will return a CSV string that will convert to a list for a random color in the x,y format.
+  
+  Be sure to convert this to a list when you use it on the other end
+  because it arrives as a CSV string.
+  
+  SAMPLE USAGE:
 
-```jinja
-availability: >-
-    {% from 'availability_template.jinja' import avail %}
-    {{- avail(['entity_1','entity_2']) | bool -}}
-```
+  ```jinja
+    {% from 'color_multi_tool.jinja' import random_xy %}
+    {% set _rxy = random_xy().split(",") | list -%}
+    {{ [_rxy[0]|float|round(3),_rxy[1]|float|round(3)] }}
+  ```
 
-Here is a full example that uses this.  It will give you percent sunshine estimate based on data from sun angle and cloud coverage if you have those integrations in your config. (Found the state statement somewhere a while ago, sorry there is no attribution. I use it in my personal config.)
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
 
-```yaml
-- template
-  - sensor:
-    - name: "sunlight_pct"
-      unique_id: 9a7586c0-0947-4b41-97e0-c0d2150bd0bb
-      unit_of_measurement: "%"
-      state: >-
-        {%- set elevation = state_attr('sun.sun','elevation') | float %}
-        {%- set cloud_coverage = states('sensor.openweathermap_cloud_coverage') | float %}
-        {%- set cloud_factor = (1 - (0.75 * ( cloud_coverage / 100) ** 3 )) %}
-        {%- set min_elevation = -6 %}
-        {%- set max_elevation = 60 %}
-        {%- set adjusted_elevation = elevation - min_elevation %}
-        {%- set adjusted_elevation = [adjusted_elevation,0] | max %}
-        {%- set adjusted_elevation = [adjusted_elevation,max_elevation - min_elevation] | min %}
-        {%- set adjusted_elevation = adjusted_elevation / (max_elevation - min_elevation) %}
-        {%- set adjusted_elevation = adjusted_elevation %}
-        {%- set adjusted_elevation = adjusted_elevation * 100 %}
-        {%- set brightness = adjusted_elevation * cloud_factor %}
-        {{ brightness | round }}
-      availability: >-
-        {% from 'availability_template.jinja' import avail %}
-        {{- avail(['sun.sun','sensor.openweathermap_cloud_coverage']) | bool -}}
-      icon: mdi:sun-angle
-      attributes:
-        friendly_name: "Sunlight Percentage"
+*********************
 
-```
+# Random hs Color
+
+## `random_hs()`
+
+  This will return a CSV string that will convert to a list for a random color in the h,s format.
+  
+  Be sure to convert this to a list when you use it on the other end
+  because it arrives as a CSV string.
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import random_hs %}
+    {% set _rhs = random_hs().split(",") | list -%}
+    {{ [_rhs[0]|float|round(2),_rhs[1]|float|round(2)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Random rgb Color
+
+## `random_rgb()`
+
+  This will return a CSV string that will convert to a list for a random color in the rgb format.
+  
+  Be sure to convert this to a list when you use it on the other end
+  because it arrives as a CSV string.
+  
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import random_rgb %}
+    {% set _rrgb = random_rgb().split(",") | list -%}
+    {{ [_rrgb[0]|int(0),_rrgb[1]|int(0),_rrgb[2]|int(0)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Return the rgb Number for a Provided Color Name
+
+## `name2rgb(color_name)`
+
+  This will return the RGB value for an official color name recognized by Home Assistant lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py and the Official CSS3 colors from w3.org: https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4    
+  
+  Names do not have spaces in them so that we can compare against requests more easily (by removing spaces from the requests as well).
+  
+  This lets "dark seagreen" and "dark sea green" both match the same color "darkseagreen".
+  
+  Names do not have spaces in them so that we can compare against requests more easily (by removing spaces from the requests as well) 
+  
+  This lets "dark seagreen" and "dark sea green" both match the same color "darkseagreen".
+  
+  You have to type in her correct name. The text you send me will be set to no spaces and lower case to match the data as described above.
+  
+  If the name is not found, it will return "0.0.0", IE black, because then name you provided is not a color.
+  
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import name2rgb %}
+    {{ name2rgb(color_name) }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Return the xy Number for a Provided rgb Number
+
+## `rgb2xy(rgb_formatted_list)`
+
+  This will return a CSV string that will convert to a list in the x,y format from the rgb list provided.
+  
+  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  
+  Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  
+  Brightness is assumed to be 100%
+  
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import rgb2xy %}
+    {% set _rgb2zy = rgb2xy(_nrgb).split(",") | list -%}
+    {{ [_rgb2zy[0]|float|round(3),_rgb2zy[1]|float|round(3)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Return the rgb Number for a Provided xy Number
+
+## `xy2rgb(xy_formatted_list)`
+
+  This will return a CSV string that will convert to a list in the rgb format from the xy list provided.
+  
+  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  
+  Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  
+  Brightness is assumed to be 100%
+  
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import xy2rgb %}
+    {% set _xy2rgb = xy2rgb(xyl).split(",") | list -%}
+    {{ [_xy2rgb[0]|int(0),_xy2rgb[1]|int(0),_xy2rgb[2]|int(0)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Return the rgb Number for a Provided hs Number
+
+## `hs2rgb(hs_formatted_list)`
+
+  This will return a CSV string that will convert to a list in the rgb format from the xy list provided.
+  
+  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  
+  Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import hs2rgb %}
+    {% set _hs2rgb = hs2rgb(hsl).split(",") | list -%}
+    {{ [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Return the hs Number for a Provided rgb Number
+
+## `rgb2hs(rgb_formatted_list)`
+
+  This will return a CSV string that will convert to a list in the x,y format from the rgb list provided.
+  
+  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  
+  Code lifted directly from the here November, 2023 at https://www.cs.rit.edu/~ncs/color/t_convert.html#RGB%20to%20HSV%20&%20HSV%20to%20RGB.
+
+  Brightness is assumed to be 100%
+  
+  SAMPLE USAGE:
+  
+  ```jinja
+    {% from 'color_multi_tool.jinja' import rgb2hs %}
+    {% set _rgb2hs = rgb2hs(rgbl).split(",") | list -%}
+    {{[ _rgb2hs[0]|float(0)|round(3),_rgb2hs[1]|float(0)|round(3)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+*********************
+
+# Return the xy Number for a Provided hs Number
+
+## `hs2xy(hs_formatted_list)`
+
+  This will return a CSV string that will convert to a list in the hs format from the xy list provided.
+  
+  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  
+  This converter uses other templates provided in this Custom Jinja Template.
+  
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import hs2xy %}
+    {% set _hs2xy = hs2xy(hsl).split(",") | list -%}
+    {{ [_hs2xy[0]|float|round(3),_hs2xy[1]|float|round(3)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
+
+
+*********************
+
+# Return the hs Number for a Provided xy Number
+
+## `xy2hs(xy_formatted_list)`
+
+  This will return a CSV string that will convert to a list in the hs format from the xy list provided.
+  
+  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  
+  This converter uses other templates provided in this Custom Jinja Template.
+
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import xy2hs %}
+    {% set _xy2hs = xy2hs(xyl).split(",") | list -%}
+    {{ [_xy2hs[0]|float|round(3),_xy2hs[1]|float|round(3)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string, so for
+    conventional usage of colors the result needs to be converted to a
+    list as shown in the example above.
 
 ### Other Info
 
-Location of this code: https://github.com/SirGoodenough/Availability-Template
+Location of this code: https://github.com/SirGoodenough/Color-Multi-Tool
 
 Let me know if you have a suggestion.
 

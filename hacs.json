@@ -1,6 +1,6 @@
 {
-    "name": "Availability Template",
-    "filename": "availability_template.jinja",
-    "homeassistant": "2023.4.0",
+    "name": "Color Multi Tool",
+    "filename": "color_multi_tool.jinja",
+    "homeassistant": "2023.11.0",
     "render_readme": true
 }
