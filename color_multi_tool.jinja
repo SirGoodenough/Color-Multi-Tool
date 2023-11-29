@@ -124,7 +124,7 @@
 {{- R -}},{{- G -}},{{- B -}}
 {% endmacro %}
 
-{% macro rgb2xy(rgb_formatted_list) %}
+{% macro rgb2xy(rgbl) %}
 {#-
   This will return a CSV string that will convert to a list in the x,y format
     from the rgb list provided.
@@ -194,7 +194,7 @@
 {{- X -}},{{- Y -}}
 {% endmacro %}
 
-{% macro xy2rgb(xy_formatted_list) %}
+{% macro xy2rgb(xyl) %}
 {#-
   This will return a CSV string that will convert to a list in the rgb format
     from the xy list provided.
@@ -267,7 +267,7 @@
 {{- R -}},{{- G -}},{{- B -}}
 {% endmacro %}
 
-{% macro hs2rgb(hs_formatted_list) %}
+{% macro hs2rgb(hsl) %}
 {#-
   This will return a CSV string that will convert to a list in the rgb format
     from the xy list provided.
@@ -345,7 +345,7 @@
 {{- R -}},{{- G -}},{{- B -}}
 {% endmacro %}
 
-{% macro rgb2hs(rgb_formatted_list) %}
+{% macro rgb2hs(rgbl) %}
 {#-
   This will return a CSV string that will convert to a list in the x,y format
     from the rgb list provided.
@@ -413,7 +413,7 @@
 {{- H -}},{{- S -}}
 {% endmacro %}
 
-{% macro hs2xy(hs_formatted_list) %}
+{% macro hs2xy(hsl) %}
 {#-
   This will return a CSV string that will convert to a list in the hs format
     from the xy list provided.
@@ -449,7 +449,7 @@
 {{- X -}},{{- Y -}}
 {% endmacro %}
 
-{% macro xy2hs(xy_formatted_list) %}
+{% macro xy2hs(xyl) %}
 {#-
   This will return a CSV string that will convert to a list in the hs format
     from the xy list provided.
