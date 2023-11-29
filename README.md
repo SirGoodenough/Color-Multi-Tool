@@ -176,8 +176,8 @@ Another good thing to do before you ask for help is try testing what you have in
 
   ```jinja
     {% from 'color_multi_tool.jinja' import rgb2xy %}
-    {% set _rgb2zy = rgb2xy(_nrgb).split(",") | list -%}
-    {{ [_rgb2zy[0]|float|round(3),_rgb2zy[1]|float|round(3)] }}
+    {% set _rgb2xy = rgb2xy(_nrgb).split(",") | list -%}
+    {{ [_rgb2xy[0]|float|round(3),_rgb2xy[1]|float|round(3)] }}
   ```
 
   REMEMBER:
