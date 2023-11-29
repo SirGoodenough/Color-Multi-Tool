@@ -71,9 +71,6 @@ Another good thing to do before you ask for help is try testing what you have in
 
   This will return a CSV string that will convert to a list for a random color in the x,y format.
   
-  Be sure to convert this to a list when you use it on the other end
-  because it arrives as a CSV string.
-  
   SAMPLE USAGE:
 
   ```jinja
@@ -94,9 +91,6 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `random_hs()`
 
   This will return a CSV string that will convert to a list for a random color in the h,s format.
-  
-  Be sure to convert this to a list when you use it on the other end
-  because it arrives as a CSV string.
 
   SAMPLE USAGE:
 
@@ -118,9 +112,6 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `random_rgb()`
 
   This will return a CSV string that will convert to a list for a random color in the rgb format.
-  
-  Be sure to convert this to a list when you use it on the other end
-  because it arrives as a CSV string.
   
   SAMPLE USAGE:
 
