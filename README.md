@@ -293,7 +293,6 @@ Another good thing to do before you ask for help is try testing what you have in
     conventional usage of colors the result needs to be converted to a
     list as shown in the example above.
 
-
 *********************
 
 # Return the hs Number for a Provided xy Number
