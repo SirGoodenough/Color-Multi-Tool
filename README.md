@@ -18,7 +18,7 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 
 # TO-DO List
 
-* Push to HACS Custom.
+* ~~Push to HACS Custom.~~
 * Error checking inputs for range.
 * Add ```Display closest color name to a given RGB```.
 * Clean-up code, add shortcuts on redundancies.
