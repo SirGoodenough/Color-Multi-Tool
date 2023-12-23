@@ -326,6 +326,8 @@ Another good thing to do before you ask for help is try testing what you have in
 
 Location of this code: https://github.com/SirGoodenough/Color-Multi-Tool
 
+Home Assistant Community Forum post: https://community.home-assistant.io/t/color-multi-tool/659958
+
 Let me know if you have a suggestion.
 
 If you have any questions, comments or additions be sure to add an issue in the above listed github repo and bring them up on my Discord Server:
