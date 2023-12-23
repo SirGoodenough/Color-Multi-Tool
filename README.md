@@ -1,10 +1,12 @@
+Custom Template for doing things with colors. 
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/custom-components/hacs)
 ![Version](https://img.shields.io/github/v/release/SirGoodenough/Color-Multi-Tool)
 
 <a href="https://www.buymeacoffee.com/SirGoodenough"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=SirGoodenough&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00" width=auto, height=30/></a>
 <base target="_blank">
 
-# Color-Multi-Tool
+# 🧯 Color-Multi-Tool
 
 Custom Template for doing things with colors. It started out by wanting a way to get a random color name off of the official color name list. Then I decided it needed a way to pull random rgb, hs, and xy colors as well. I then decided to build the conversions between all the types.
 
@@ -27,7 +29,7 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 
 # Installation
 
-Install this in HACS or download the `color_multi_tool.jinja`. From this repository and place the files into your `config\custom_templates` directory.
+Install this in HACS or download the `color_multi_tool.jinja`. From [this repository](https://github.com/SirGoodenough/Color-Multi-Tool) and place the files into your `config\custom_templates` directory.
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SirGoodenough&repository=Color-Multi-Tool&category=template)
 
