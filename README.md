@@ -16,16 +16,22 @@ I followed the conversion code as close as I could, but I find that if you conve
 
 I welcome the PR from anyone that can improve any of this code.  It is 'functional' but not optimized at this point, and there are things I want to do with it.  However I wanted to release it for others to collab at this point.
 
+Documentation for this Custom Template can be found at:
+
+- The Description of each of the templates themselves.
+- The github readme: https://github.com/SirGoodenough/Color-Multi-Tool/blob/master/README.md.
+- Home Assistant Community Forum: https://community.home-assistant.io/t/color-multi-tool/659958.
+
 This requires HomeAssistant version 2023.11.0 or greater due to the use of the list test in the code.
 
 # 🦠 TO-DO List
 
-* ~~Push to HACS Custom.~~
-* Error checking inputs for range.
-* Add ```Display closest color name to a given RGB```.
-* Clean-up code, add shortcuts on redundancies.
-* Return a list of all the official color names.
-* Push to Hacs released.
+- ~~Push to HACS Custom.~~
+- Error checking inputs for range.
+- Add ```Display closest color name to a given RGB```.
+- Clean-up code, add shortcuts on redundancies.
+- Return a list of all the official color names.
+- Push to Hacs released.
 
 # 🔩 Installation
 
