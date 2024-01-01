@@ -18,7 +18,7 @@ I welcome the PR from anyone that can improve any of this code.  It is 'function
 
 This requires HomeAssistant version 2023.11.0 or greater due to the use of the list test in the code.
 
-# TO-DO List
+# 🦠 TO-DO List
 
 * ~~Push to HACS Custom.~~
 * Error checking inputs for range.
@@ -27,7 +27,7 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 * Return a list of all the official color names.
 * Push to Hacs released.
 
-# Installation
+# 🔩 Installation
 
 Install this in HACS or download the `color_multi_tool.jinja`. From [this repository](https://github.com/SirGoodenough/Color-Multi-Tool) and place the files into your `config\custom_templates` directory.
 
