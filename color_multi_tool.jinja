@@ -1206,11 +1206,12 @@ A (using #8) macro hs to xy list: {% set _hs2xyA = hs2xy(_rgb2hs8_list).split(",
 {%- set _xy2hs9_list = [_xy2hs9[0]|float(0)|round(3),_xy2hs9[1]|float(0)|round(3)] %}
 {{- _hs2xyA_list }} -> {{ _xy2hs9_list }}
 
+Test the tests by changing the list values:
 {%- set _rgbl = [255,165,0] %}
-{{ chkRGB(_rgbl) | bool }}
+Check RGB: {{ chkRGB(_rgbl) | bool }}
 {%- set _xyl = [0.497,0.472] %}
-{{ chkXY(_xyl) | bool }}
+check XY : {{ chkXY(_xyl) | bool }}
 {%- set _hsl = [38.824,100.0] %}
-{{ chkHS(_hsl) | bool }}
+Check HS : {{ chkHS(_hsl) | bool }}
 
 #}
