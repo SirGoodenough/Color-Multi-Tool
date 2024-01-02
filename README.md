@@ -327,6 +327,89 @@ Another good thing to do before you ask for help is try testing what you have in
     Everything returned from a macro template is a string, so for
     conventional usage of colors the result needs to be converted to a
     list as shown in the example above.
+    list as shown in the example above.
+
+*********************
+
+# Test if a list is a valid RGB color list
+
+## 'chkRGB(_rgbl)'
+
+This will test a list to make sure it’s a valid RGB color list.
+
+First we need to make sure it’s a list, and that the list has 3 members.
+Then we need to test that each member is a number, an integer, and between 0 & 255.
+If all that is true return True.
+If any is not true, return False.
+Development credit to @Didgeridrew and @jeffcrum on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/3)
+for help sorting this out.
+
+  SAMPLE USAGE:
+
+```jinja
+    {% from 'color_multi_tool.jinja' import chkRGB %}
+    {{ chkRGB([255,165,0]) | bool }}
+```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+# Test if a list is a valid XY color list
+
+## 'chkXY(_xyl)'
+
+This will test a list to make sure it’s a valid XY color list.
+
+First we need to make sure it’s a list, and that the list has 2 members.
+Then we need to test that each member is a number, and between 0 & 1.
+If all that is true return True.
+If any is not true, return False.
+Development credit to @123 on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
+for help sorting this out.
+
+  SAMPLE USAGE:
+
+```jinja
+    {% from 'color_multi_tool.jinja' import chkXY %}
+    {{ chkXY([0.497,0.472]) | bool }}
+```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+# Test if a list is a valid HS color list
+
+## 'chkHS(_hsl)'
+
+This will test a list to make sure it’s a valid HS color list.
+
+First we need to make sure it’s a list, and that the list has 2 members.
+Then we need to test that each member is a number.
+The first one has to be 0 to 100, the second one has to be 0 to 360.
+If all that is true return True.
+If any is not true, return False.
+Development credit to @123 on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
+for help sorting this out.
+
+  SAMPLE USAGE:
+
+```jinja
+    {% from 'color_multi_tool.jinja' import chkHS %}
+    {{ chkHS([38.824,100.0]) | bool }}
+```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
 
 ### Other Info
 
