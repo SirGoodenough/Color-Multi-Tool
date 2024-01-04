@@ -27,11 +27,11 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 # 🦠 TO-DO List
 
 - ~~Push to HACS Custom.~~
-- Error checking inputs for range.
-- Add ```Display closest color name to a given RGB```.
-- Clean-up code, add shortcuts on redundancies.
-- Return a list of all the official color names.
+- ~~Error checking inputs for range.~~
+- ~~Return a list of all the official color names.~~
+- ~~Clean-up code, add shortcuts on redundancies.~~
 - Push to Hacs released.
+- Add ```Display closest color name to a given RGB```.
 
 # 🔩 Installation
 
@@ -410,6 +410,46 @@ for help sorting this out.
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
     certain of the result.
+
+*********************
+
+## `chkNAME(color_name)`
+
+Is this color name on the official list?
+This will test a provided color name to see if it is on the HA color list.
+
+First we need to make sure it’s a string_like variable.
+Then we test that the string is only lowercase letters to match the HA list.
+Then we iterate thru the list to make sure it is on the list.
+If all that is true return true.
+If any is not true, return false.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkNAME %}
+    {{ chkNAME('orange') | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+## `color_list()`
+
+  This will return all of the official color names recognized by Home Assistant
+    lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
+    and the Official CSS3 colors from w3.org:
+    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+    Names do not have spaces in them so that we can compare against
+    requests more easily (by removing spaces from the requests as well).
+    This lets "dark seagreen" and "dark sea green" both match the same
+    color "darkseagreen". 
+    You also get the RGB color code for each of the color names.
+  
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import color_list() %}
+    {{- color_list() -}}
 
 ### Other Info
 
