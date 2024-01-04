@@ -581,9 +581,9 @@ If any is not true, return false.
     This lets "dark seagreen" and "dark sea green" both match the same
     color "darkseagreen". 
     You also get the RGB color code for each of the color names.
-  
+
   SAMPLE USAGE:
-    {% from 'color_multi_tool.jinja' import randomcolor_list_name %}
+    {% from 'color_multi_tool.jinja' import color_list %}
     {{- color_list() -}}
 #}
 {%- for dict_item in _nameMap._rgb %}
@@ -1246,3 +1246,4 @@ Check NAME : {{ chkNAME(_name) | bool }}
 Test color_list:
 {{- color_list() }}
 
+#}
