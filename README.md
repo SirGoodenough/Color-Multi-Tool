@@ -30,8 +30,8 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 - ~~Error checking inputs for range.~~
 - ~~Return a list of all the official color names.~~
 - ~~Clean-up code, add shortcuts on redundancies.~~
+- ~~Add ```Display closest color name to a given RGB```~~
 - Push to Hacs released.
-- Add ```Display closest color name to a given RGB```.
 
 # 🔩 Installation
 
