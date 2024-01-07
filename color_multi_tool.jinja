@@ -16,14 +16,15 @@
 #}
 {%- set _color_dict = _nameMap._rgb | random %}
 {{- _color_dict.color -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro random_xy() %}
 {#-
   This will return a CSV string that will convert to a list for a
     random color in the x,y format.
   Be sure to convert this to a list when you use it on the other end
-  because it arrives as a CSV string.
+    because it arrives as a CSV string.
+  Thanks to @123 for help cleaning up the random circuit [here](https://community.home-assistant.io/t/is-there-a-better-way-to-do-this-or-for-light-use-is-this-just-fine/667543/3).
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import random_xy %}
@@ -36,14 +37,15 @@
 
 {%- set (X,Y) = [range(1001),range(1001)] | map('random') | list %}
 {{- X/1000 -}},{{- Y/1000 -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro random_hs() %}
 {#-
   This will return a CSV string that will convert to a list for a
     random color in the h,s format.
   Be sure to convert this to a list when you use it on the other end
-  because it arrives as a CSV string.
+    because it arrives as a CSV string.
+  Thanks to @123 for help cleaning up the random circuit [here](https://community.home-assistant.io/t/is-there-a-better-way-to-do-this-or-for-light-use-is-this-just-fine/667543/3).
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import random_hs %}
@@ -55,14 +57,15 @@
 #}
 {%- set (H,S) = [range(36001),range(10001)] | map('random') | list %}
 {{- H/100 -}},{{- S/100 -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro random_rgb() %}
 {#-
   This will return a CSV string that will convert to a list for a
     random color in the rgb format.
   Be sure to convert this to a list when you use it on the other end
-  because it arrives as a CSV string.
+    because it arrives as a CSV string.
+  Thanks to @123 for help cleaning up the random circuit [here](https://community.home-assistant.io/t/is-there-a-better-way-to-do-this-or-for-light-use-is-this-just-fine/667543/3).
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import random_rgb %}
@@ -74,7 +77,7 @@
 #}
 {% set (R,G,B) = [range(256),range(256),range(256)] | map('random') | list %}
 {{- R -}},{{- G -}},{{- B -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro name2rgb(color_name) %}
 {#-
@@ -107,7 +110,7 @@
   {%- set B = 0 %}
 {%- endif %}
 {{- R -}},{{- G -}},{{- B -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro rgb2name(_range, rgbl) %}
 {#-
@@ -221,7 +224,7 @@
   {%- set Y = 0.0 %}
 {%- endif %}
 {{- X -}},{{- Y -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro xy2rgb(xyl) %}
 {#-
@@ -292,7 +295,7 @@
   {%- set B = 0 %}
 {%- endif %}
 {{- R -}},{{- G -}},{{- B -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro hs2rgb(hsl) %}
 {#-
@@ -368,7 +371,7 @@
   {%- set B = 0 %}
 {%- endif %}
 {{- R -}},{{- G -}},{{- B -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro rgb2hs(rgbl) %}
 {#-
@@ -434,7 +437,7 @@
   {%- set V = 0.0 %}
 {%- endif %}
 {{- H -}},{{- S -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro hs2xy(hsl) %}
 {#-
@@ -468,7 +471,7 @@
   {%- set Y = 0.0 %}
 {%- endif %}
 {{- X -}},{{- Y -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro xy2hs(xyl) %}
 {#-
@@ -502,7 +505,7 @@
   {%- set S = 0.0 %}
 {%- endif %}
 {{- H -}},{{- S -}}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro chkRGB(_rgbl) %}
 {#- Is the RGB list Valid? 
@@ -514,7 +517,7 @@ If all that is true return true.
 If any is not true, return false.
 Development credit to @Didgeridrew and @jeffcrum on the
 [Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/3)
-for help sorting this out.
+  for help sorting this out.
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import chkRGB %}
@@ -526,10 +529,12 @@ for help sorting this out.
 #}
 {%- if _rgbl is list and _rgbl | count == 3 %}
 {%- for clr in _rgbl if is_number(clr) and int(clr,0) == clr and 0 <= clr <= 255 %}
-{% if loop.last %}
-{{ loop.index == 3 }}
-{%- endif %}{% endfor%}{% else %}{{ false }}{%- endif %}
-{% endmacro %}
+{%- if loop.last %}
+{{- loop.index == 3 -}}
+{%- endif %}{%- endfor%}{%- else %}
+{{- false -}}
+{%- endif %}
+{%- endmacro %}
 
 {% macro chkXY(_xyl) %}
 {#- Is the XY list Valid? 
@@ -541,7 +546,7 @@ If all that is true return true.
 If any is not true, return false.
 Development credit to @123 on the
 [Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
-for help sorting this out.
+  for help sorting this out.
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import chkXY %}
@@ -554,8 +559,8 @@ for help sorting this out.
 {{- _xyl is list and
    _xyl | select('number') | list | count == 2 and
    _xyl | select('<', 0) | list | count == 0 and
-   _xyl | select('>', 1) | list | count == 0 }}
-{% endmacro %}
+   _xyl | select('>', 1) | list | count == 0 -}}
+{%- endmacro %}
 
 {% macro chkHS(_hsl) %}
 {#- Is the XY list Valid? 
@@ -568,7 +573,7 @@ If all that is true return true.
 If any is not true, return false.
 Development credit to @123 on the
 [Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
-for help sorting this out.
+  for help sorting this out.
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import chkHS %}
@@ -582,8 +587,8 @@ for help sorting this out.
    _hsl | select('number') | list | count == 2 and
    _hsl | select('<', 0) | list | count == 0 and
    _hsl[0] <= 100 and
-   _hsl[1] <= 360 }}
-{% endmacro %}
+   _hsl[1] <= 360 -}}
+{%- endmacro %}
 
 {% macro chkNAME(color_name) %}
 {#- Is this color name on the official list?
@@ -603,14 +608,18 @@ If any is not true, return false.
     This always returns text, so cast to bool on the other end to be
     certain of the result.
 #}
-{%- if color_name is string_like and 
+{%- if color_name is string_like and
   color_name == color_name | regex_replace('[^a-z]', '') %}
 {%- set ns = namespace(found = false) %}
 {%- for color_item in _nameMap._rgb %}
 {%- if color_item.color == color_name %}
 {%- set ns.found = true %}
-{%- break %}{% endif %}{% endfor %}{{ ns.found }}{% else %}{{ false }}{% endif %}
-{% endmacro %}
+{%- break %}{%- endif %}{%- endfor %}
+{{- ns.found -}}
+{%- else %}
+{{- false -}}
+{%- endif %}
+{%- endmacro %}
 
 {% macro color_list() %}
 {#-
@@ -627,12 +636,13 @@ If any is not true, return false.
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import color_list %}
-    {{- color_list() -}}
+    {{- color_list().split('\n') | list -}}
 #}
-{%- for dict_item in _nameMap._rgb %}
-{{ dict_item.color -}},{{- dict_item.r -}},{{- dict_item.g -}},{{- dict_item.b -}}
+{%- for colors in _nameMap._rgb -%}
+{%- set c_list = {colors.color:[colors.r,colors.g,colors.b]} %}
+{{ c_list }}
 {%- endfor %}
-{% endmacro %}
+{%- endmacro %}
 
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
     (unless you want to add your own custom color that is...): #}
@@ -1255,7 +1265,7 @@ chkXY, chkHS, chkNAME, color_list %}
 
 4 macro name to rgb list: {% set _nrgb4_name = random_name() %}
 {%- set _nrgb4 = name2rgb(_nrgb4_name).split(",") | list %}
-{%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] %}
+{%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] | list %}
 {{- _nrgb4_name }} -> {{ _nrgb4_list }}
 B (using #4) macro RGB to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2name -}}
@@ -1289,6 +1299,6 @@ Check HS :   {{ chkHS(_hsl) | bool }}
 Check NAME : {{ chkNAME(_name) | bool }}
 
 Test color_list:
-{{- color_list() }}
+{{ color_list().split('\n') | list }}
 
 #}
