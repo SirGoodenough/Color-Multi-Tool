@@ -639,9 +639,9 @@ If any is not true, return false.
     {{- color_list().split('\n') | list -}}
 #}
 {%- for colors in _nameMap._rgb -%}
-{%- set c_list = {colors.color:[colors.r,colors.g,colors.b]} %}
-{{ c_list }}
-{%- endfor %}
+{%- set c_list = {colors.color:[colors.r,colors.g,colors.b]} -%}
+{{- c_list ~ '\n'-}}
+{%- endfor -%}
 {%- endmacro %}
 
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
