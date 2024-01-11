@@ -1,6 +1,6 @@
 Custom Template for doing things with colors. 
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/custom-components/hacs)
 ![Version](https://img.shields.io/github/v/release/SirGoodenough/Color-Multi-Tool)
 
 <a href="https://www.buymeacoffee.com/SirGoodenough"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=SirGoodenough&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00" width=auto, height=30/></a>
@@ -10,11 +10,11 @@ Custom Template for doing things with colors.
 
 Custom Template for doing things with colors. It started out by wanting a way to get a random color name off of the official color name list. Then I decided it needed a way to pull random rgb, hs, and xy colors as well. I then decided to build the conversions between all the types.
 
-The conversions are derived from HA's own color conversion code with the exception of rgb2hs.  Home Assistant uses the built-in python module to do that in core, so I pulled the code for that from another source.
+The conversions are derived from HA's own color conversion code with the exception of rgb2hs. Home Assistant uses the built-in python module to do that in core, so I pulled the code for that from another source.
 
 I followed the conversion code as close as I could, but I find that if you convert a color then convert it back, it drifts quite a bit.
 
-I welcome the PR from anyone that can improve any of this code.  It is 'functional' but not optimized at this point, and there are things I want to do with it.  However I wanted to release it for others to collab at this point.
+I welcome the PR from anyone that can improve any of this code. It is 'functional' but not optimized at this point. In several cases I don't understand the code, I just ported it over, hopefully successfully. PR's are welcome.
 
 Documentation for this Custom Template can be found at:
 
@@ -27,10 +27,10 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 # 🦠 TO-DO List
 
 - ~~Push to HACS Custom.~~
-- Error checking inputs for range.
-- Add ```Display closest color name to a given RGB```.
-- Clean-up code, add shortcuts on redundancies.
-- Return a list of all the official color names.
+- ~~Error checking inputs for range.~~
+- ~~Return a list of all the official color names.~~
+- ~~Clean-up code, add shortcuts on redundancies.~~
+- ~~Add ```Display closest color name to a given RGB```~~
 - Push to Hacs released.
 
 # 🔩 Installation
@@ -46,9 +46,9 @@ You *may* need to enable 'experimental features' mode. To do this find the HACS 
 #### Other help
 
 Before you report a 'Bug', you need to make sure you have read the accompanying Descriptions on the templates and this README and have followed all the settings required here.
-This is important because if these instructions are not followed, you will likely have a bad day and be forced to contact me for help.  Not that I don't want to help, but personal interaction takes me a while to respond and is generally non-productive.
+This is important because if these instructions are not followed, you will likely have a bad day and be forced to contact me for help. Not that I don't want to help, but personal interaction takes me a while to respond and is generally non-productive.
 
-Another good thing to do before you ask for help is try testing what you have in the Developer Tools Template Tab in Home Assistant. There you can adjust this and that until you figure out the answer to your question yourself.  
+Another good thing to do before you ask for help is try testing what you have in the Developer Tools Template Tab in Home Assistant. There you can adjust this and that until you figure out the answer to your question yourself. At the end of the color table in the code is the developer code that I use to test everything. If you provide any PR's make sure you load this and test all the things.
 
 [![Open your Home Assistant instance and show your template developer tools.](https://my.home-assistant.io/badges/developer_template.svg)](https://my.home-assistant.io/redirect/developer_template/)
 
@@ -58,12 +58,12 @@ Another good thing to do before you ask for help is try testing what you have in
 
 ## `random_name()`
 
-  This will return one of the official color names recognized by Home Assistant lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py and the Official CSS3 colors from w3.org: https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4    
-  
+  This will return one of the official color names recognized by Home Assistant lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py and the Official CSS3 colors from w3.org: https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+
   Names do not have spaces in them so that we can compare against requests more easily (by removing spaces from the requests as well).
-  
+
   This lets "dark seagreen" and "dark sea green" both match the same color "darkseagreen".
-  
+
 ### SAMPLE USAGE:
 
   ```jinja
@@ -78,7 +78,7 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `random_xy()`
 
   This will return a CSV string that will convert to a list for a random color in the x,y format.
-  
+
   SAMPLE USAGE:
 
   ```jinja
@@ -120,7 +120,7 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `random_rgb()`
 
   This will return a CSV string that will convert to a list for a random color in the rgb format.
-  
+
   SAMPLE USAGE:
 
   ```jinja
@@ -140,20 +140,20 @@ Another good thing to do before you ask for help is try testing what you have in
 
 ## `name2rgb(color_name)`
 
-  This will return the RGB value for an official color name recognized by Home Assistant lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py and the Official CSS3 colors from w3.org: https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4    
-  
+  This will return the RGB value for an official color name recognized by Home Assistant lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py and the Official CSS3 colors from w3.org: https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+
   Names do not have spaces in them so that we can compare against requests more easily (by removing spaces from the requests as well).
-  
+
   This lets "dark seagreen" and "dark sea green" both match the same color "darkseagreen".
-  
+
   Names do not have spaces in them so that we can compare against requests more easily (by removing spaces from the requests as well) 
-  
+
   This lets "dark seagreen" and "dark sea green" both match the same color "darkseagreen".
-  
+
   You have to type in her correct name. The text you send me will be set to no spaces and lower case to match the data as described above.
-  
+
   If the name is not found, it will return "0.0.0", IE black, because then name you provided is not a color.
-  
+
   SAMPLE USAGE:
 
   ```jinja
@@ -168,18 +168,38 @@ Another good thing to do before you ask for help is try testing what you have in
 
 *********************
 
+# Return the Color Name for a Provided rgb Number
+
+## `rgb2name(_range, rgbl)`
+
+  This template will accept a list representing an RGB value plus a range value representing the window size of the 'close enough' color name. It will return the Home Assistant Color name that matches it or is close to it within a +/- range you specify.
+
+- If you want only an exact match, then set the range to 0.
+- If you think that +10/-10 is close enough, then set the range to 10.
+
+  For default the color is set to black [0,0,0] and the range is 0, so it will by give you ['black'] for invalid input.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb2name %}
+    {{ name2rgb(color_name) }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+*********************
+
 # Return the xy Number for a Provided rgb Number
 
 ## `rgb2xy(rgb_formatted_list)`
 
   This will return a CSV string that will convert to a list in the x,y format from the rgb list provided.
-  
+
   Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
-  
+
   Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
-  
+
   Brightness is assumed to be 100%
-  
+
   SAMPLE USAGE:
 
   ```jinja
@@ -200,13 +220,13 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `xy2rgb(xy_formatted_list)`
 
   This will return a CSV string that will convert to a list in the rgb format from the xy list provided.
-  
+
   Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
-  
+
   Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
-  
+
   Brightness is assumed to be 100%
-  
+
   SAMPLE USAGE:
 
   ```jinja
@@ -227,11 +247,11 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `hs2rgb(hs_formatted_list)`
 
   This will return a CSV string that will convert to a list in the rgb format from the xy list provided.
-  
+
   Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
-  
+
   Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
-  
+
   Brightness is assumed to be 100%
 
   SAMPLE USAGE:
@@ -254,15 +274,15 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `rgb2hs(rgb_formatted_list)`
 
   This will return a CSV string that will convert to a list in the x,y format from the rgb list provided.
-  
+
   Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
-  
+
   Code lifted directly from the here November, 2023 at https://www.cs.rit.edu/~ncs/color/t_convert.html#RGB%20to%20HSV%20&%20HSV%20to%20RGB.
 
   Brightness is assumed to be 100%
-  
+
   SAMPLE USAGE:
-  
+
   ```jinja
     {% from 'color_multi_tool.jinja' import rgb2hs %}
     {% set _rgb2hs = rgb2hs(rgbl).split(",") | list -%}
@@ -281,11 +301,11 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `hs2xy(hs_formatted_list)`
 
   This will return a CSV string that will convert to a list in the hs format from the xy list provided.
-  
+
   Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
-  
+
   This converter uses other templates provided in this Custom Jinja Template.
-  
+
   Brightness is assumed to be 100%
 
   SAMPLE USAGE:
@@ -308,9 +328,9 @@ Another good thing to do before you ask for help is try testing what you have in
 ## `xy2hs(xy_formatted_list)`
 
   This will return a CSV string that will convert to a list in the hs format from the xy list provided.
-  
+
   Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
-  
+
   This converter uses other templates provided in this Custom Jinja Template.
 
   Brightness is assumed to be 100%
@@ -327,6 +347,129 @@ Another good thing to do before you ask for help is try testing what you have in
     Everything returned from a macro template is a string, so for
     conventional usage of colors the result needs to be converted to a
     list as shown in the example above.
+    list as shown in the example above.
+
+*********************
+
+# Test if a list is a valid RGB color list
+
+## `chkRGB(_rgbl)`
+
+This will test a list to make sure it’s a valid RGB color list.
+
+First we need to make sure it’s a list, and that the list has 3 members.
+Then we need to test that each member is a number, an integer, and between 0 & 255.
+If all that is true return True.
+If any is not true, return False.
+Development credit to @Didgeridrew and @jeffcrum on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/3)
+for help sorting this out.
+
+  SAMPLE USAGE:
+
+```jinja
+    {% from 'color_multi_tool.jinja' import chkRGB %}
+    {{ chkRGB([255,165,0]) | bool }}
+```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+# Test if a list is a valid XY color list
+
+## `chkXY(_xyl)`
+
+This will test a list to make sure it’s a valid XY color list.
+
+First we need to make sure it’s a list, and that the list has 2 members.
+Then we need to test that each member is a number, and between 0 & 1.
+If all that is true return True.
+If any is not true, return False.
+Development credit to @123 on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
+for help sorting this out.
+
+  SAMPLE USAGE:
+
+```jinja
+    {% from 'color_multi_tool.jinja' import chkXY %}
+    {{ chkXY([0.497,0.472]) | bool }}
+```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+# Test if a list is a valid HS color list
+
+## `chkHS(_hsl)`
+
+This will test a list to make sure it’s a valid HS color list.
+
+First we need to make sure it’s a list, and that the list has 2 members.
+Then we need to test that each member is a number.
+The first one has to be 0 to 100, the second one has to be 0 to 360.
+If all that is true return True.
+If any is not true, return False.
+Development credit to @123 on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
+for help sorting this out.
+
+  SAMPLE USAGE:
+
+```jinja
+    {% from 'color_multi_tool.jinja' import chkHS %}
+    {{ chkHS([38.824,100.0]) | bool }}
+```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+## `chkNAME(color_name)`
+
+Is this color name on the official list?
+This will test a provided color name to see if it is on the HA color list.
+
+First we need to make sure it’s a string_like variable.
+Then we test that the string is only lowercase letters to match the HA list.
+Then we iterate thru the list to make sure it is on the list.
+If all that is true return true.
+If any is not true, return false.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkNAME %}
+    {{ chkNAME('orange') | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
+## `color_list()`
+
+  This will return all of the official color names recognized by Home Assistant
+    lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
+    and the Official CSS3 colors from w3.org:
+    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+    Names do not have spaces in them so that we can compare against
+    requests more easily (by removing spaces from the requests as well).
+    This lets "dark seagreen" and "dark sea green" both match the same
+    color "darkseagreen". 
+    You also get the RGB color code for each of the color names.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import color_list() %}
+    {{- color_list().split('\n') | list -}}
 
 ### Other Info
 
