@@ -449,8 +449,11 @@ If all that is true return true.
 If any is not true, return false.
 
   SAMPLE USAGE:
+
+  ```jinja
     {% from 'color_multi_tool.jinja' import chkNAME %}
     {{ chkNAME('orange') | bool }}
+  ```
 
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
@@ -472,8 +475,11 @@ If any is not true, return false.
     You also get the RGB color code for each of the color names.
 
   SAMPLE USAGE:
+
+  ```jinja
     {% from 'color_multi_tool.jinja' import color_list() %}
     {{- color_list().split('\n') | list -}}
+  ```
 
 ### Other Info
 
