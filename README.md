@@ -184,13 +184,11 @@ Another good thing to do before you ask for help is try testing what you have in
 
   ```jinja
     {% from 'color_multi_tool.jinja' import name2rgb %}
-    {{ rgb2name(10, rgbl) | list }}
+    {{ rgb2name(10, rgbl) }}
   ```
 
   REMEMBER:
     Everything returned from a macro template is a string.
-    In this case, it will be a string that looks like a list of strings.
-    You will need to cast it to actually be a list.
 
 *********************
 
