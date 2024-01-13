@@ -357,7 +357,7 @@ Another good thing to do before you ask for help is try testing what you have in
 
 # Test if a list is a valid RGB color list
 
-## `chkRGB(_rgbl)`
+## `chkRGB(rgb_formatted_list)`
 
 This will test a list to make sure it’s a valid RGB color list.
 
@@ -384,7 +384,7 @@ for help sorting this out.
 
 # Test if a list is a valid XY color list
 
-## `chkXY(_xyl)`
+## `chkXY(xy_formatted_list)`
 
 This will test a list to make sure it’s a valid XY color list.
 
@@ -411,7 +411,7 @@ for help sorting this out.
 
 # Test if a list is a valid HS color list
 
-## `chkHS(_hsl)`
+## `chkHS(hs_formatted_list)`
 
 This will test a list to make sure it’s a valid HS color list.
 
