@@ -206,13 +206,13 @@
   selectattr('g', 'le', _Gl) |
   selectattr('b', 'ge', _Bg) |
   selectattr('b', 'le', _Bl) |
-  map(attribute='color') | list | default(['black']) %}
+  map(attribute='color') | list | default(['black']) | join(',') %}
 {{- out -}}
 {%- else %}
   {#- Input was not valid #}
-{{-['black'] | list -}}
-{%- endif %}
-{% endmacro %}
+{{-['black'] | list | join(',') -}}
+{%- endif -%}
+{% endmacro -%}
 
 {% macro rgb2xy(rgbl) %}
 {#-
