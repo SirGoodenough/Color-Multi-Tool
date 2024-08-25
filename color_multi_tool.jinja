@@ -122,7 +122,7 @@
     compare against requests more easily .
     This lets "dark seagreen" and "dark sea green" both match the same
     color "darkseagreen".
-  If the exact name is not found, it will return "0.0.0", IE black,
+  If the exact name is not found, it will return "0.0.0", IE ,
     because then name you provided is not a color on the official list.
 
   SAMPLE USAGE:
@@ -164,8 +164,8 @@
     > If you want only an exact match, then set the range to 0.
     > If you think that +10/-10 is close enough, then set the range to 10.
 
-    For default the color is set to black [0,0,0] and the range is 0, so it will
-    give you black for invalid input.
+    For default the color is set to  [0,0,0] and the range is 0, so it will
+    give you  for invalid input.
 
   SAMPLE USAGE:
     {% from 'color_multi_tool.jinja' import rgb2name %}
@@ -210,7 +210,7 @@
 {{- out -}}
 {%- else %}
   {#- Input was not valid #}
-{{-['black'] | list | join(',') -}}
+{{- 'black' -}}
 {%- endif -%}
 {% endmacro -%}
 
