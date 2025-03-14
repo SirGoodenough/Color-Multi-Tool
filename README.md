@@ -31,7 +31,7 @@ This requires HomeAssistant version 2023.11.0 or greater due to the use of the l
 - ~~Return a list of all the official color names.~~
 - ~~Clean-up code, add shortcuts on redundancies.~~
 - ~~Add ```Display closest color name to a given RGB```~~
-- Push to Hacs released.
+- ~~Push to Hacs released.~~
 
 # 🔩 Installation
 
@@ -84,7 +84,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import random_xy %}
     {% set _rxy = random_xy().split(",") | list -%}
-    {{ [_rxy[0]|float|round(3),_rxy[1]|float|round(3)] }}
+    {{ [_rxy[0]|float|round(3),_rxy[1]|float|round(3)] | list}}
   ```
 
   REMEMBER:
@@ -105,7 +105,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import random_hs %}
     {% set _rhs = random_hs().split(",") | list -%}
-    {{ [_rhs[0]|float|round(2),_rhs[1]|float|round(2)] }}
+    {{ [_rhs[0]|float|round(2),_rhs[1]|float|round(2)] | list}}
   ```
 
   REMEMBER:
@@ -126,7 +126,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import random_rgb %}
     {% set _rrgb = random_rgb().split(",") | list -%}
-    {{ [_rrgb[0]|int(0),_rrgb[1]|int(0),_rrgb[2]|int(0)] }}
+    {{ [_rrgb[0]|int(0),_rrgb[1]|int(0),_rrgb[2]|int(0)] | list}}
   ```
 
   REMEMBER:
@@ -158,7 +158,8 @@ Another good thing to do before you ask for help is try testing what you have in
 
   ```jinja
     {% from 'color_multi_tool.jinja' import name2rgb %}
-    {{ name2rgb(color_name) }}
+    {% set _name2rgb = name2rgb(color_name) %}
+    {{ [_name2rgb[0]|int(0),_name2rgb[1]|int(0),_name2rgb[2]|int(0)] | list}}
   ```
 
   REMEMBER:
@@ -170,7 +171,7 @@ Another good thing to do before you ask for help is try testing what you have in
 
 # Return the Color Name for a Provided rgb Number
 
-## `rgb2name(_range, rgbl)`
+## `rgb2name(range, rgb_formatted_list)`
 
   This template will accept a list representing an RGB value plus a range value representing the window size of the 'close enough' color name. It will return the Home Assistant Color name that matches it or is close to it within a +/- range you specify.
 
@@ -180,8 +181,11 @@ Another good thing to do before you ask for help is try testing what you have in
   For default the color is set to black [0,0,0] and the range is 0, so it will by give you ['black'] for invalid input.
 
   SAMPLE USAGE:
-    {% from 'color_multi_tool.jinja' import rgb2name %}
-    {{ name2rgb(color_name) }}
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import name2rgb %}
+    {{ rgb2name(10, rgbl) }}
+  ```
 
   REMEMBER:
     Everything returned from a macro template is a string.
@@ -204,8 +208,8 @@ Another good thing to do before you ask for help is try testing what you have in
 
   ```jinja
     {% from 'color_multi_tool.jinja' import rgb2xy %}
-    {% set _rgb2xy = rgb2xy(_nrgb).split(",") | list -%}
-    {{ [_rgb2xy[0]|float|round(3),_rgb2xy[1]|float|round(3)] }}
+    {% set _rgb2xy = rgb2xy(rgbl).split(",") | list -%}
+    {{ [_rgb2xy[0]|float|round(3),_rgb2xy[1]|float|round(3)] | list}}
   ```
 
   REMEMBER:
@@ -232,7 +236,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import xy2rgb %}
     {% set _xy2rgb = xy2rgb(xyl).split(",") | list -%}
-    {{ [_xy2rgb[0]|int(0),_xy2rgb[1]|int(0),_xy2rgb[2]|int(0)] }}
+    {{ [_xy2rgb[0]|int(0),_xy2rgb[1]|int(0),_xy2rgb[2]|int(0)] | list}}
   ```
 
   REMEMBER:
@@ -259,7 +263,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import hs2rgb %}
     {% set _hs2rgb = hs2rgb(hsl).split(",") | list -%}
-    {{ [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] }}
+    {{ [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] | list}}
   ```
 
   REMEMBER:
@@ -286,7 +290,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import rgb2hs %}
     {% set _rgb2hs = rgb2hs(rgbl).split(",") | list -%}
-    {{[ _rgb2hs[0]|float(0)|round(3),_rgb2hs[1]|float(0)|round(3)] }}
+    {{[ _rgb2hs[0]|float(0)|round(3),_rgb2hs[1]|float(0)|round(3)] | list}}
   ```
 
   REMEMBER:
@@ -313,7 +317,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import hs2xy %}
     {% set _hs2xy = hs2xy(hsl).split(",") | list -%}
-    {{ [_hs2xy[0]|float|round(3),_hs2xy[1]|float|round(3)] }}
+    {{ [_hs2xy[0]|float|round(3),_hs2xy[1]|float|round(3)] | list}}
   ```
 
   REMEMBER:
@@ -340,7 +344,7 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import xy2hs %}
     {% set _xy2hs = xy2hs(xyl).split(",") | list -%}
-    {{ [_xy2hs[0]|float|round(3),_xy2hs[1]|float|round(3)] }}
+    {{ [_xy2hs[0]|float|round(3),_xy2hs[1]|float|round(3)] | list}}
   ```
 
   REMEMBER:
@@ -353,7 +357,7 @@ Another good thing to do before you ask for help is try testing what you have in
 
 # Test if a list is a valid RGB color list
 
-## `chkRGB(_rgbl)`
+## `chkRGB(rgb_formatted_list)`
 
 This will test a list to make sure it’s a valid RGB color list.
 
@@ -380,7 +384,7 @@ for help sorting this out.
 
 # Test if a list is a valid XY color list
 
-## `chkXY(_xyl)`
+## `chkXY(xy_formatted_list)`
 
 This will test a list to make sure it’s a valid XY color list.
 
@@ -407,7 +411,7 @@ for help sorting this out.
 
 # Test if a list is a valid HS color list
 
-## `chkHS(_hsl)`
+## `chkHS(hs_formatted_list)`
 
 This will test a list to make sure it’s a valid HS color list.
 
@@ -445,8 +449,11 @@ If all that is true return true.
 If any is not true, return false.
 
   SAMPLE USAGE:
+
+  ```jinja
     {% from 'color_multi_tool.jinja' import chkNAME %}
     {{ chkNAME('orange') | bool }}
+  ```
 
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
@@ -468,8 +475,11 @@ If any is not true, return false.
     You also get the RGB color code for each of the color names.
 
   SAMPLE USAGE:
+
+  ```jinja
     {% from 'color_multi_tool.jinja' import color_list() %}
     {{- color_list().split('\n') | list -}}
+  ```
 
 ### Other Info
 
