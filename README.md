@@ -2,8 +2,13 @@ Custom Template for doing things with colors.
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/custom-components/hacs)
 ![Version](https://img.shields.io/github/v/release/SirGoodenough/Color-Multi-Tool)
+[![Community Forum](https://img.shields.io/badge/community-forum-orange.svg?style=for-the-badge)](https://community.home-assistant.io/t/color-multi-tool/659958)
 
-<a href="https://www.buymeacoffee.com/SirGoodenough"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=SirGoodenough&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00" width=auto, height=30/></a>
+[![GitHub issues](https://img.shields.io/github/issues-raw/SirGoodenough/Color-Multi-Tool?style=for-the-badge)](https://github.com/SirGoodenough/Color-Multi-Tool/issues?q=is%3Aopen+is%3Aissue)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/SirGoodenough/Color-Multi-Tool?style=for-the-badge)](https://github.com/SirGoodenough/Color-Multi-Tool/issues?q=is%3Aissue+is%3Aclosed)
+[![GitHub contributors](https://img.shields.io/github/contributors/SirGoodenough/Color-Multi-Tool?style=for-the-badge)](https://github.com/SirGoodenough/Color-Multi-Tool/graphs/contributors)
+
+<a href="https://www.buymeacoffee.com/SirGoodenough"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=SirGoodenough&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00" width=auto, height=30/></a>    [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SirGoodenough&repository=Color-Multi-Tool&category=template)
 <base target="_blank">
 
 # 🧯 Color-Multi-Tool
@@ -184,7 +189,7 @@ Another good thing to do before you ask for help is try testing what you have in
 
   ```jinja
     {% from 'color_multi_tool.jinja' import rgb2name %}
-    {{ rgb2name(rgbl,10) }}
+    {{ rgb2name(10,rgbl) }}
   ```
 
   REMEMBER:
