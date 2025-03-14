@@ -183,8 +183,8 @@ Another good thing to do before you ask for help is try testing what you have in
   SAMPLE USAGE:
 
   ```jinja
-    {% from 'color_multi_tool.jinja' import name2rgb %}
-    {{ rgb2name(10, rgbl) }}
+    {% from 'color_multi_tool.jinja' import rgb2name %}
+    {{ rgb2name(rgbl,10) }}
   ```
 
   REMEMBER:
