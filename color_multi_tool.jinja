@@ -790,6 +790,60 @@ If any is not true, return false.
 {%- endfor -%}
 {%- endmacro %}
 
+{%- macro k2rgb(colour_temperature) %}
+  {# Converts from K to RGB, algorithm courtesy of 
+  http%}//www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/ #}
+  {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1]%}
+  {%- set tmp_internal = colour_temperature / 100.0 %}
+  
+  {# red #}
+  {%- if tmp_internal <= 66 %}
+      {%- set red = 255 %}
+  {%- else %}
+      {%- set tmp_red = 329.698727446 * ((tmp_internal - 60)** -0.1332047592)%}
+      {%- if tmp_red < 0%}
+          {%- set red = 0%}
+      {%- elif tmp_red > 255%}
+          {%- set red = 255%}
+      {%- else %}
+          {%- set red = tmp_red%}
+  {%endif%}{%endif%}
+  {# green #}
+  {%- if tmp_internal <= 66 %}
+      {%- set tmp_green = 99.4708025861 * log(tmp_internal) - 161.1195681661 %}
+      {%- if tmp_green < 0%}
+          {%- set green = 0%}
+      {%- elif tmp_green > 255%}
+          {%- set green = 255%}
+      {%- else %}
+          {%- set green = tmp_green%}
+      {%endif%}
+  {%- else %}
+      {%- set tmp_green = 288.1221695283 * ((tmp_internal - 60)**-0.0755148492) %}
+      {%- if tmp_green < 0%}
+          {%- set green = 0%}
+      {%- elif tmp_green > 255%}
+          {%- set green = 255%}
+      {%- else %}
+          {%- set green = tmp_green%}
+  {%endif%}{%endif%}
+  {# blue #}
+  {%- if tmp_internal >=66%}
+     {%- set  blue = 255%}
+  {%- elif tmp_internal <= 19%}
+      {%- set blue = 0%}
+  {%- else %}
+      {%- set tmp_blue = 138.5177312231 * log(tmp_internal - 10) - 305.0447927307%}
+      {%- if tmp_blue < 0%}
+          {%- set blue = 0%}
+      {%- elif tmp_blue > 255%}
+          {%- set blue = 255%}
+      {%- else %}
+          {%- set blue = tmp_blue%}
+  {%endif%}{%endif%}
+  {{ [red|int, green|int, blue|int] }}
+{% endmacro %}
+
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
     (unless you want to add your own custom color that is...): #}
 {% set _nameMap = {
