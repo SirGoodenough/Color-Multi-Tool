@@ -814,7 +814,7 @@ If any is not true, return false.
       as attribution should you use this code elsewhere.
 #}
   {# Screen input as a number #}
-{%- set colour_temperature = float(colour_temperature,0) %}
+{%- set colour_temperature = int(colour_temperature,0) %}
   {#- The next line returns =, closest, or between 1000 & 40000. #}
 {#- {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1] %} #}
 
@@ -911,11 +911,11 @@ NOTE: If you want to input Kelvin numbers that are out of range,
       expected to be followed & referenced
       as attribution should you use this code elsewhere.
 -#}
-{%- set _K = _K | float( 0 ) -%}
+{%- set _K = _K | int( 0 ) -%}
 {%- if _K == 0 %}
-    {{- false -}}
+  {{- false -}}
 {%- else %}
-    {{- ( _K >= 1000 ) and ( _K <= 40000) -}}
+  {{- ( _K >= 1000 ) and ( _K <= 40000) -}}
 {%- endif %}
 {#- {{- true -}} -#}
 {%- endmacro %}
