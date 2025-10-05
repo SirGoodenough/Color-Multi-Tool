@@ -883,8 +883,8 @@ If any is not true, return false.
 {%- endmacro %}
 
 {%- macro chkK(_K) -%}
-{#- Is the Kelvin vakue in the Valid Range? 
-This will test that a number is a valid Kelkvin number 2000 thru 6500.
+{#- Is the Kelvin value in the Valid Range? 
+This will test that a number is a valid Kelvin number 1000 thru 40000.
 
 First we need to test that this is a number.
 Then we check if it 200 thru 6500.
@@ -915,7 +915,7 @@ NOTE: If you want to input Kelvin numbers that are out of range,
 {%- if _K == 0 %}
     {{- false -}}
 {%- else %}
-    {{- ( _K > 999 ) and ( _K < 40001) -}}
+    {{- ( _K >= 1000 ) and ( _K <= 40000) -}}
 {%- endif %}
 {#- {{- true -}} -#}
 {%- endmacro %}
