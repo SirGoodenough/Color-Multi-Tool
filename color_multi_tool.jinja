@@ -790,64 +790,135 @@ If any is not true, return false.
 {%- endfor -%}
 {%- endmacro %}
 
-{%- macro k2rgb(colour_temperature) %}
-  {# Converts from K to RGB, algorithm courtesy of 
-  http%}//www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/ #}
-  {# This jinga adaptation courtesy [Didgeridrew](https://github.com/Didgeridrew) #}
-  {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1]%}
+%- macro k2rgb(colour_temperature) %}
+  {# This will return and RGB list of the corresponding Color Temperature 
+  Kelvin value provided.
+  Value will be validated as a number 1000 thru 40000.
+  If you want to cheat with Kelvin values outside that range,
+  read the chkK(int) macro for instructionson doing this.
+
+  Converts from K to RGB, algorithm courtesy of 
+  http//www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+  This jinga adaptation courtesy [Didgeridrew](https://github.com/Didgeridrew)
+
+  SAMPLE USAGE:
+    {% set _k2rgb = k2rgb(kl).split(",") | list %}
+    {{ [_k2rgb[0]|int(0),_k2rgb[1]|int(0),_k2rgb[2]|int(0)] }}
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {# Screen input as a number in range #}
+{%- set colour_temperature = float(colour_temperature,0) %}
+{# {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1] %} #}
+
+  {#- First a test to make sure input is valid #}
+{%- if chkK(colour_temperature) | bool | default(false) %}
+
+  {#- Pull in the data #}
   {%- set tmp_internal = colour_temperature / 100.0 %}
-  
-  {# red #}
-  {%- if tmp_internal <= 66 %}
-      {%- set red = 255 %}
-  {%- else %}
-      {%- set tmp_red = 329.698727446 * ((tmp_internal - 60)** -0.1332047592)%}
-      {%- if tmp_red < 0%}
-          {%- set red = 0%}
-      {%- elif tmp_red > 255%}
-          {%- set red = 255%}
-      {%- else %}
-          {%- set red = tmp_red%}
-  {%endif%}{%endif%}
-  {# green #}
-  {%- if tmp_internal <= 66 %}
-      {%- set tmp_green = 99.4708025861 * log(tmp_internal) - 161.1195681661 %}
-      {%- if tmp_green < 0%}
-          {%- set green = 0%}
-      {%- elif tmp_green > 255%}
-          {%- set green = 255%}
-      {%- else %}
-          {%- set green = tmp_green%}
-      {%endif%}
-  {%- else %}
-      {%- set tmp_green = 288.1221695283 * ((tmp_internal - 60)**-0.0755148492) %}
-      {%- if tmp_green < 0%}
-          {%- set green = 0%}
-      {%- elif tmp_green > 255%}
-          {%- set green = 255%}
-      {%- else %}
-          {%- set green = tmp_green%}
-  {%endif%}{%endif%}
-  {# blue #}
-  {%- if tmp_internal >=66%}
+
+    {#- red #}
+    {%- if tmp_internal <= 66 %}
+        {%- set red = 255 %}
+    {%- else %}
+        {%- set tmp_red = 329.698727446 * ((tmp_internal - 60)** -0.1332047592)%}
+        {%- if tmp_red < 0%}
+            {%- set red = 0%}
+        {%- elif tmp_red > 255%}
+            {%- set red = 255%}
+        {%- else %}
+            {%- set red = tmp_red%}
+    {%-endif%}{%-endif%}
+    {#- green #}
+    {%- if tmp_internal <= 66 %}
+        {%- set tmp_green = 99.4708025861 * log(tmp_internal) - 161.1195681661 %}
+        {%- if tmp_green < 0%}
+            {%- set green = 0%}
+        {%- elif tmp_green > 255%}
+            {%- set green = 255%}
+        {%- else %}
+            {%- set green = tmp_green%}
+        {%-endif%}
+    {%- else %}
+        {%- set tmp_green = 288.1221695283 * ((tmp_internal - 60)**-0.0755148492) %}
+        {%- if tmp_green < 0%}
+            {%- set green = 0%}
+        {%- elif tmp_green > 255%}
+            {%- set green = 255%}
+        {%- else %}
+            {%- set green = tmp_green%}
+    {%-endif%}{%-endif%}
+    {#- blue #}
+    {%- if tmp_internal >=66%}
       {%- set  blue = 255%}
-  {%- elif tmp_internal <= 19%}
-      {%- set blue = 0%}
+    {%- elif tmp_internal <= 19%}
+        {%- set blue = 0%}
+    {%- else %}
+        {%- set tmp_blue = 138.5177312231 * log(tmp_internal - 10) - 305.0447927307%}
+        {%- if tmp_blue < 0%}
+            {%- set blue = 0%}
+        {%- elif tmp_blue > 255%}
+            {%- set blue = 255%}
+        {%- else %}
+            {%- set blue = tmp_blue%}
+    {%-endif%}{%-endif%}
+    {#- {{ [red|int, green|int, blue|int] }} #}
+    {%- set R = red | int(0) %}
+    {%- set G = green | int(0) %}
+    {%- set B = blue | int(0) %}
   {%- else %}
-      {%- set tmp_blue = 138.5177312231 * log(tmp_internal - 10) - 305.0447927307%}
-      {%- if tmp_blue < 0%}
-          {%- set blue = 0%}
-      {%- elif tmp_blue > 255%}
-          {%- set blue = 255%}
-      {%- else %}
-          {%- set blue = tmp_blue%}
-  {%endif%}{%endif%}
-  {# {{ [red|int, green|int, blue|int] }} #}
-  {%- set R = red | int(0) %}
-  {%- set G = green | int(0) %}
-  {%- set B = blue | int(0) %}
+      {#- Input was not valid #}
+    {%- set R = 0 %}
+    {%- set G = 0 %}
+    {%- set B = 0 %}
+{%- endif %}
 {{- R -}},{{- G -}},{{- B -}}
-{% endmacro %}
+{%- endmacro %}
+
+{%- macro chkK(_K) -%}
+{#- Is the Kelvin vakue in the Valid Range? 
+This will test that a number is a valid Kelkvin number 2000 thru 6500.
+
+First we need to test that this is a number.
+Then we check if it 200 thru 6500.
+If all that is true return true.
+If any is not true, return false.
+
+NOTE: If you want to input Kelvin numbers that are out of range,
+  then uncomment the {{- true -}}  right before {% endmacro %}
+    so that this only tests for a valid number.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkK %}
+    {{ chkK(2000) | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+-#}
+{%- set _K = _K | float( 0 ) -%}
+{%- if _K == 0 %}
+    {{- false -}}
+{%- else %}
+    {{- ( _K > 999 ) and ( _K < 40001) -}}
+{%- endif %}
+{#- {{- true -}} -#}
+{%- endmacro %}
+
 
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
     (unless you want to add your own custom color that is...): #}
@@ -1454,9 +1525,10 @@ If any is not true, return false.
 
 {#-
 TESTING CODE FOR DEVELOPER TAB TO TEST THIS CUSTOM JINJA:
-{% from 'color_multi_tool.jinja' import random_name, random_xy, random_hs,
+{%- from 'color_multi_tool.jinja' import random_name, random_xy, random_hs, 
 random_rgb, name2rgb, rgb2name, rgb2xy, xy2rgb, hs2rgb, rgb2hs, xy2hs, hs2xy, chkRGB,
-chkXY, chkHS, chkNAME, color_list, k2rgb -%}
+chkXY, chkHS, chkNAME, color_list, k2rgb, chkK %}
+
 0 macro random name: {{ random_name() }}
 1 macro random xy list: {% set _rxy1 = random_xy().split(",") | list %}
 {%- set _rxy1_list = [_rxy1[0]|float|round(3),_rxy1[1]|float|round(3)] %}
@@ -1466,16 +1538,16 @@ chkXY, chkHS, chkNAME, color_list, k2rgb -%}
 {{- _rhs2_list }} 
 3 macro random rgb list: {% set _rrgb3 = random_rgb().split(",") | list %}
 {%- set _rrgb3_list = [_rrgb3[0]|int(0),_rrgb3[1]|int(0),_rrgb3[2]|int(0)] %}
-{{- _rrgb3_list }}
-C macro temperature to rgb list: {% set _rrgbK = range(2000,6500) | random -%}
-{%- set _rrgbT = k2rgb(_rrgbK ).split(",") | list %}
+{{- _rrgb3_list }} 
+C macro temperature to rgb list: {% set _rrgbK = range(1000,40000) | random -%}
+{%- set _rrgbT = k2rgb(_rrgbK).split(",") | list %}
 {%- set _rrgbT_list = [_rrgbT[0]|int(0),_rrgbT[1]|int(0),_rrgbT[2]|int(0)] | list %}
 {{- _rrgbK }} K -> {{ _rrgbT_list }}
-
 4 macro name to rgb list: {% set _nrgb4_name = random_name() %}
 {%- set _nrgb4 = name2rgb(_nrgb4_name).split(",") | list %}
 {%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] | list %}
 {{- _nrgb4_name }} -> {{ _nrgb4_list }}
+
 B (using #4) macro RGB to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2name -}}
 5 (using #4) macro rgb to xy list: {% set _rgb2zy5 = rgb2xy(_nrgb4_list).split(",") | list %}
@@ -1499,13 +1571,35 @@ A (using #8) macro hs to xy list: {% set _hs2xyA = hs2xy(_rgb2hs8_list).split(",
 
 Test the tests by changing the values:
 {%- set _rgbl = [255,165,0] %}
-Check RGB:   {{ chkRGB(_rgbl) | bool }}
+Check RGB Valid:   {{ _rgbl ~" -> "~ chkRGB(_rgbl) | bool }}
+{%- set _rgbl = [235,165,300] %}
+Check RGB FAIL OOR:   {{ _rgbl ~" -> "~ chkRGB(_rgbl) | bool }}
+{%- set _rgbl = ['test',165,0] %}
+Check RGB FAIL text:   {{ _rgbl ~" -> "~ chkRGB(_rgbl) | bool }}
 {%- set _xyl = [0.497,0.472] %}
-check XY :   {{ chkXY(_xyl) | bool }}
+check XY Valid:   {{ _xyl ~" -> "~ chkXY(_xyl) | bool }}
+{%- set _xyl = [0.497,12] %}
+check XY FAIL OOR:   {{ _xyl ~" -> "~ chkXY(_xyl) | bool }}
+{%- set _xyl = [0.497,'test'] %}
+check XY FAIL text:   {{ _xyl ~" -> "~ chkXY(_xyl) | bool }}
 {%- set _hsl = [38.824,100.0] %}
-Check HS :   {{ chkHS(_hsl) | bool }}
+Check HS Valid:   {{ _hsl ~" -> "~ chkHS(_hsl) | bool }}
+{%- set _hsl = [38.824,900] %}
+Check HS FAIL OOR:   {{ _hsl ~" -> "~ chkHS(_hsl) | bool }}
+{%- set _hsl = ['test',100.0] %}
+Check HS FAIL text:   {{ _hsl ~" -> "~ chkHS(_hsl) | bool }}
 {%- set _name = 'orange' %}
-Check NAME : {{ chkNAME(_name) | bool }}
+Check NAME Valid: {{ _name ~" -> "~ chkNAME(_name) | bool }}
+{%- set _name = 'rainbow' %}
+Check NAME FAIL OOR: {{ _name ~" -> "~ chkNAME(_name) | bool }}
+{%- set _name = 255 %}
+Check NAME FAIL number: {{ _name ~" -> "~ chkNAME(_name) | bool }}
+{%- set _kelvin = _rrgbK %}
+Check KELVIN Valid: {{ _kelvin ~" -> "~ chkK(_kelvin) | bool }}
+{%- set _kelvin = 500 %}
+Check KELVIN FAIL OOR: {{ _kelvin ~" -> "~ chkK(_kelvin) | bool }}
+{%- set _kelvin = 'test' %}
+Check KELVIN FAIL text: {{ _kelvin ~" -> "~ chkK(_kelvin) | bool }}
 
 Test color_list:
 {{ color_list().split('\n') | list }}
