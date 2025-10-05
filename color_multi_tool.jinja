@@ -813,9 +813,10 @@ If any is not true, return false.
       expected to be followed & referenced
       as attribution should you use this code elsewhere.
 #}
-  {# Screen input as a number in range #}
+  {# Screen input as a number #}
 {%- set colour_temperature = float(colour_temperature,0) %}
-{# {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1] %} #}
+  {#- The next line returns =, closest, or between 1000 & 40000. #}
+{#- {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1] %} #}
 
   {#- First a test to make sure input is valid #}
 {%- if chkK(colour_temperature) | bool | default(false) %}
