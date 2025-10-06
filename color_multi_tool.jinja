@@ -790,7 +790,7 @@ If any is not true, return false.
 {%- endfor -%}
 {%- endmacro %}
 
-%- macro k2rgb(colour_temperature) %}
+{%- macro k2rgb(colour_temperature) %}
   {# This will return and RGB list of the corresponding Color Temperature 
   Kelvin value provided.
   Value will be validated as a number 1000 thru 40000.
