@@ -844,6 +844,75 @@ If any is not true, return false.
   {{ [red|int, green|int, blue|int] }}
 {% endmacro %}
 
+
+{% macro rgb_bestname(rgbl) %}
+{#-
+  This will return a string that is the name in the HA table
+    closest to the rgb list provided based on the sum of the squared differences. 
+
+  Code adapted from https://gist.github.com/xalbertoisorna here October, 2025:
+   https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
+  For default the color is set to black [0,0,0] so it will
+    give you black for invalid input as well.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb_bestname %}
+    {{ rgb_bestname(rgbl) }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+
+    {#- Set defaults #}
+{%- set minDist = 200000 %}
+{%- set out = 'black' %}
+    {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+  {%- set ir = rgbl[0] | int(0) %}
+  {%- set ig = rgbl[1] | int(0) %}
+  {%- set ib = rgbl[2] | int(0) %}
+  {%- if ri + ig + ib != 0 %}
+    {#- Find rhe best matching color in the list. #}
+    {%- for best in _nameMap['_rgb'] %}
+    {#- Sum of the square of the differences of r, g, & b. Lowest is best match. #}
+      {%- set dist = (ir-best.r)*(ir-best.r)+(ig-best.g)*(ig-best.g)+(ib-best.rb)*(ib-best.b) %}
+      {%- if dist < minDist %}
+        {%- set out = best.color %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+{%- else %}
+  {%- set out = 'black' %}
+{%- endif %}
+{{- out -}}
+{%- endmacro %}
+
+{#   NOTES:
+unsigned rgb_to_kelvin(unsigned r, unsigned g, unsigned b) {
+    unsigned minDist = 0xFFFFFF;
+    unsigned minTemp = 0;
+    for (unsigned i = 0; i < HEIGHT; i++) {
+        unsigned rT = colorTable[i][0];
+        unsigned gT = colorTable[i][1];
+        unsigned bT = colorTable[i][2];
+        unsigned dist = (r-rT)*(r-rT) + (g-gT)*(g-gT) + (b-bT)*(b-bT);
+        if (dist < minDist) {
+            minDist = dist;
+            minTemp = colorTable[i][3];
+        }
+    }
+    return minTemp;
+#}
+
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
     (unless you want to add your own custom color that is...): #}
 {% set _nameMap = {
