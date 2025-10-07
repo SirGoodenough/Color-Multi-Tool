@@ -851,7 +851,7 @@ If any is not true, return false.
     closest to the rgb list provided based on the sum of the squared differences. 
 
   Code adapted from https://gist.github.com/xalbertoisorna here October, 2025:
-   https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+    https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
 
   For default the color is set to black [0,0,0] so it will
     give you black for invalid input as well.
@@ -1503,7 +1503,7 @@ If any is not true, return false.
 TESTING CODE FOR DEVELOPER TAB TO TEST THIS CUSTOM JINJA:
 {% from 'color_multi_tool.jinja' import random_name, random_xy, random_hs,
 random_rgb, name2rgb, rgb2name, rgb2xy, xy2rgb, hs2rgb, rgb2hs, xy2hs, hs2xy, chkRGB,
-chkXY, chkHS, chkNAME, color_list %}
+chkXY, chkHS, chkNAME, color_list, rgb_bestname %}
 0 macro random name: {{ random_name() }}
 1 macro random xy list: {% set _rxy1 = random_xy().split(",") | list %}
 {%- set _rxy1_list = [_rxy1[0]|float|round(3),_rxy1[1]|float|round(3)] %}
