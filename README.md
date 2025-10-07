@@ -180,8 +180,8 @@ Another good thing to do before you ask for help is try testing what you have in
 
   This template will accept a list representing an RGB value plus a range value representing the window size of the 'close enough' color name. It will return the Home Assistant Color name that matches it or is close to it within a +/- range you specify.
 
-- If you want only an exact match, then set the range to 0.
-- If you think that +10/-10 is close enough, then set the range to 10.
+  - If you want only an exact match, then set the range to 0.
+  - If you think that +10/-10 is close enough, then set the range to 10.
 
   For default the color is set to black [0,0,0] and the range is 0, so it will by give you ['black'] for invalid input.
 
@@ -199,7 +199,7 @@ Another good thing to do before you ask for help is try testing what you have in
 
 # Return the dingle Closest Color Name for a Provided rgb Number
 
-## rgb_bestname(rgbl) 
+## `rgb_bestname(rgbl)`
 
   This will return a string that is the name in the HA table
     closest to the rgb list provided based on the sum of the squared differences.
