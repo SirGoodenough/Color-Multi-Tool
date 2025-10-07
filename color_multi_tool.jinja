@@ -873,45 +873,28 @@ If any is not true, return false.
 #}
 
     {#- Set defaults #}
-{%- set minDist = 200000 %}
-{%- set out = 'black' %}
+{%- set M = namespace(dist = 0, minDist = 200000, out = 'black', r = 0, g = 0, b = 0) %}
     {#- First a test to make sure input is valid #}
 {%- if chkRGB(rgbl) | bool %}
-  {%- set ir = rgbl[0] | int(0) %}
-  {%- set ig = rgbl[1] | int(0) %}
-  {%- set ib = rgbl[2] | int(0) %}
-  {%- if ri + ig + ib != 0 %}
-    {#- Find rhe best matching color in the list. #}
+  {%- set M.r = rgbl[0] | int(0) %}
+  {%- set M.g = rgbl[1] | int(0) %}
+  {%- set M.b = rgbl[2] | int(0) %}
+  {%- if M.r + M.g + M.b != 0 %}
+    {#- Find the best matching color in the list. #}
     {%- for best in _nameMap['_rgb'] %}
     {#- Sum of the square of the differences of r, g, & b. Lowest is best match. #}
-      {%- set dist = (ir-best.r)*(ir-best.r)+(ig-best.g)*(ig-best.g)+(ib-best.rb)*(ib-best.b) %}
-      {%- if dist < minDist %}
-        {%- set out = best.color %}
+      {%- set M.dist = (M.r-best.r)*(M.r-best.r)+(M.g-best.g)*(M.g-best.g)+(M.b-best.b)*(M.b-best.b) %}
+      {%- if M.dist < M.minDist %}
+        {%- set M.minDist = M.dist  %}
+        {%- set M.out = best.color %}
       {%- endif %}
     {%- endfor %}
   {%- endif %}
 {%- else %}
-  {%- set out = 'black' %}
+  {%- set M.out = 'black' %}
 {%- endif %}
-{{- out -}}
+{{- M.out -}}
 {%- endmacro %}
-
-{#   NOTES:
-unsigned rgb_to_kelvin(unsigned r, unsigned g, unsigned b) {
-    unsigned minDist = 0xFFFFFF;
-    unsigned minTemp = 0;
-    for (unsigned i = 0; i < HEIGHT; i++) {
-        unsigned rT = colorTable[i][0];
-        unsigned gT = colorTable[i][1];
-        unsigned bT = colorTable[i][2];
-        unsigned dist = (r-rT)*(r-rT) + (g-gT)*(g-gT) + (b-bT)*(b-bT);
-        if (dist < minDist) {
-            minDist = dist;
-            minTemp = colorTable[i][3];
-        }
-    }
-    return minTemp;
-#}
 
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
     (unless you want to add your own custom color that is...): #}
@@ -1538,6 +1521,8 @@ chkXY, chkHS, chkNAME, color_list %}
 {{- _nrgb4_name }} -> {{ _nrgb4_list }}
 B (using #4) macro RGB to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2name -}}
+E (using #4) macro rgb to Best Match Name: {%- set _rgb2Bname = rgb_bestname(_nrgb4_list) %}
+{{- _nrgb4_list }} -> {{ _rgb2Bname }}
 5 (using #4) macro rgb to xy list: {% set _rgb2zy5 = rgb2xy(_nrgb4_list).split(",") | list %}
 {%- set _rgb2zy5_list = [_rgb2zy5[0]|float(0)|round(3),_rgb2zy5[1]|float(0)|round(3)] %}
 {{- _nrgb4_list }} -> {{_rgb2zy5_list }}
