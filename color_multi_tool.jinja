@@ -1753,6 +1753,8 @@ C macro temperature to rgb list: {% set _rrgbK = range(1000,40000) | random -%}
 {%- set _rrgbT = k2rgb(_rrgbK).split(",") | list %}
 {%- set _rrgbT_list = [_rrgbT[0]|int(0),_rrgbT[1]|int(0),_rrgbT[2]|int(0)] | list %}
 {{- _rrgbK }} K -> {{ _rrgbT_list }}
+F  (using #C) macro RGB to color Temperature: {% set _rgb2Temp = rgb2K(_rrgbT_list) %}
+{{- _rrgbT_list }} -> {{ _rgb2Temp -}}
 4 macro name to rgb list: {% set _nrgb4_name = random_name() %}
 {%- set _nrgb4 = name2rgb(_nrgb4_name).split(",") | list %}
 {%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] | list %}
