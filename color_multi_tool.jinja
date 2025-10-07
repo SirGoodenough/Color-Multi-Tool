@@ -915,7 +915,7 @@ NOTE: If you want to input Kelvin numbers that are out of range,
 {%- if _K == 0 %}
   {{- false -}}
 {%- else %}
-  {{- ( _K >= 1000 ) and ( _K <= 40000) -}}
+  {{- ( _K >= 500 ) and ( _K <= 40000) -}}
 {%- endif %}
 {#- {{- true -}} -#}
 {%- endmacro %}
