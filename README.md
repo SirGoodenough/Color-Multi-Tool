@@ -197,6 +197,33 @@ Another good thing to do before you ask for help is try testing what you have in
 
 *********************
 
+# Return the dingle Closest Color Name for a Provided rgb Number
+
+## rgb_bestname(rgbl) 
+
+  This will return a string that is the name in the HA table
+    closest to the rgb list provided based on the sum of the squared differences.
+
+  One valid color name will be returned.
+
+  For default the color is set to black [0,0,0] so it will
+    give you black for invalid input as well.
+
+  Code adapted from https://gist.github.com/xalbertoisorna here October, 2025:
+    https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import rgb_bestname %}
+    {{ rgb_bestname(rgbl) }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+*********************
+
 # Return the xy Number for a Provided rgb Number
 
 ## `rgb2xy(rgb_formatted_list)`
