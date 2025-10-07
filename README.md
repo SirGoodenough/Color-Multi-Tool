@@ -197,6 +197,37 @@ Another good thing to do before you ask for help is try testing what you have in
 
 *********************
 
+# Return the rgb Number that is Complementary to a provided rgb Number
+
+## `rgb_complement(rgbl)`
+
+  This will return a CSV string that is the complementary
+    of the rgb list provided. Complementary colors are pairs
+    of colors that, when combined or mixed, cancel each other
+    out by producing a grayscale color like white or black
+    This means that the light waves they produce together comprise
+    all of the visible wavelengths of light. On the color wheel,
+    complementary colors are located directly opposite each other.
+
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+
+  Code lifted directly from the here October, 2025 at
+    https://rgbcolorpicker.com/complementary.
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import rgb_complement %}
+    {% set _rgb_c = rgb_complement(rgbl).split(",") | list %}
+    {{ [_rgb_c[0]|int(0),_rgb_c[1]|int(0),_rgb_c[2]|int(0)] }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+*********************
+
 # Return the xy Number for a Provided rgb Number
 
 ## `rgb2xy(rgb_formatted_list)`
