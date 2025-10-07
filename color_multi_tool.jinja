@@ -798,7 +798,7 @@ If any is not true, return false.
   read the chkK(int) macro for instructionson doing this.
 
   Converts from K to RGB, algorithm courtesy of 
-  http//www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+  http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
   This jinga adaptation courtesy [Didgeridrew](https://github.com/Didgeridrew)
 
   SAMPLE USAGE:
@@ -918,6 +918,59 @@ NOTE: If you want to input Kelvin numbers that are out of range,
   {{- ( _K >= 1000 ) and ( _K <= 40000) -}}
 {%- endif %}
 {#- {{- true -}} -#}
+{%- endmacro %}
+
+
+{% macro rgb2K(rgbl) %}
+  {# This will return the Color Temperature Kelvin nased on the RGB value provided.
+  Input value will be validated as a list of 3 integers between 0 & 255.
+
+  Default output is 0, so if something goes wrong it will return 0.
+
+  Converts from RGB to K, algorithm courtesy of 
+  http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/.
+  The closest match code and the idea for this method is from:
+  https://gist.github.com/xalbertoisorna October, 2025:
+  https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+  These numbers were dropped in a table as a lookup and are polled
+  based on a best match formula.
+  That formula squares the difference for R, G, & B and adds them up,
+  lowest score wins. The table is not continuous, it jumps 100 KELVIN at a
+  time so there are some approximations going on here.
+  None of this color stuff is exact...
+
+  SAMPLE USAGE:
+
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- set K = namespace(dist = 0, minDist = 200000, out = 0, r = 0, g = 0, b = 0) %}
+    {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+  {%- set K.r = rgbl[0] | int(0) %}
+  {%- set K.g = rgbl[1] | int(0) %}
+  {%- set K.b = rgbl[2] | int(0) %}
+  {%- if K.r + K.g + K.b != 0 %}
+    {#- Find the best matching KELVIN in the list. #}
+    {%- for best in _rgbKMap['_rgbK'] %}
+    {#- Sum of the square of the differences of r, g, & b. Lowest is best match. #}
+      {%- set K.dist = (K.r-best.r)*(K.r-best.r)+(K.g-best.g)*(K.g-best.g)+(K.b-best.b)*(K.b-best.b) %}
+      {%- if K.dist < K.minDist %}
+        {%- set K.minDist = K.dist  %}
+        {%- set K.out = best[3] %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+{%- else %}
+  {%- set K.out = 0 %}
+{%- endif %}
+{{- K.out -}}
 {%- endmacro %}
 
 
@@ -1521,6 +1574,162 @@ NOTE: If you want to input Kelvin numbers that are out of range,
     'r': 24,
     'g': 188,
     'b': 242, },
+  ],
+} %}
+
+{#- RGB TO KELVIN MAP DATA. DO NOT CHANGE BELOW THIS LINE #}
+{% set _rgbKMap = {
+  '_rgbK': [
+    {181,205,255,14900},
+    {182,205,255,14800},
+    {182,206,255,14500},
+    {182,206,255,14600},
+    {182,206,255,14700},
+    {183,206,255,14300},
+    {183,206,255,14400},
+    {183,207,255,14200},
+    {184,207,255,13900},
+    {184,207,255,14000},
+    {184,207,255,14100},
+    {185,207,255,13800},
+    {185,208,255,13600},
+    {185,208,255,13700},
+    {186,208,255,13300},
+    {186,208,255,13400},
+    {186,208,255,13500},
+    {187,209,255,13000},
+    {187,209,255,13100},
+    {187,209,255,13200},
+    {188,209,255,12900},
+    {188,210,255,12700},
+    {188,210,255,12800},
+    {189,210,255,12400},
+    {189,210,255,12500},
+    {189,210,255,12600},
+    {190,211,255,12200},
+    {190,211,255,12300},
+    {191,211,255,12000},
+    {191,211,255,12100},
+    {192,212,255,11700},
+    {192,212,255,11800},
+    {192,212,255,11900},
+    {193,213,255,11500},
+    {193,213,255,11600},
+    {194,213,255,11300},
+    {194,213,255,11400},
+    {195,214,255,11100},
+    {195,214,255,11200},
+    {196,214,255,11000},
+    {196,215,255,10900},
+    {197,215,255,10700},
+    {197,215,255,10800},
+    {198,216,255,10600},
+    {199,216,255,10500},
+    {199,217,255,10400},
+    {200,217,255,10200},
+    {200,217,255,10300},
+    {201,218,255,10100},
+    {202,218,255,9900},
+    {202,218,255,10000},
+    {203,219,255,9800},
+    {204,219,255,9700},
+    {205,220,255,9500},
+    {205,220,255,9600},
+    {206,221,255,9400},
+    {207,221,255,9300},
+    {208,222,255,9200},
+    {209,222,255,9100},
+    {210,223,255,9000},
+    {211,223,255,8900},
+    {212,224,255,8800},
+    {213,225,255,8700},
+    {214,225,255,8600},
+    {215,226,255,8500},
+    {216,227,255,8400},
+    {217,227,255,8300},
+    {218,228,255,8200},
+    {220,229,255,8100},
+    {221,230,255,8000},
+    {223,231,255,7900},
+    {224,232,255,7800},
+    {226,233,255,7700},
+    {228,234,255,7600},
+    {230,235,255,7500},
+    {232,236,255,7400},
+    {234,237,255,7300},
+    {237,239,255,7200},
+    {240,240,255,7100},
+    {243,242,255,7000},
+    {246,244,255,6900},
+    {250,246,255,6800},
+    {254,249,255,6700},
+    {255,68,0,0},
+    {255,68,0,100},
+    {255,68,0,200},
+    {255,68,0,300},
+    {255,68,0,400},
+    {255,68,0,500},
+    {255,68,0,600},
+    {255,68,0,700},
+    {255,68,0,800},
+    {255,68,0,900},
+    {255,68,0,1000},
+    {255,77,0,1100},
+    {255,86,0,1200},
+    {255,94,0,1300},
+    {255,101,0,1400},
+    {255,108,0,1500},
+    {255,115,0,1600},
+    {255,121,0,1700},
+    {255,126,0,1800},
+    {255,132,0,1900},
+    {255,137,14,2000},
+    {255,142,27,2100},
+    {255,146,39,2200},
+    {255,151,50,2300},
+    {255,155,61,2400},
+    {255,159,70,2500},
+    {255,163,79,2600},
+    {255,167,87,2700},
+    {255,170,95,2800},
+    {255,174,103,2900},
+    {255,177,110,3000},
+    {255,180,117,3100},
+    {255,184,123,3200},
+    {255,187,129,3300},
+    {255,190,135,3400},
+    {255,193,141,3500},
+    {255,195,146,3600},
+    {255,198,151,3700},
+    {255,201,157,3800},
+    {255,203,161,3900},
+    {255,206,166,4000},
+    {255,208,171,4100},
+    {255,211,175,4200},
+    {255,213,179,4300},
+    {255,215,183,4400},
+    {255,218,187,4500},
+    {255,220,191,4600},
+    {255,222,195,4700},
+    {255,224,199,4800},
+    {255,226,202,4900},
+    {255,228,206,5000},
+    {255,230,209,5100},
+    {255,232,213,5200},
+    {255,234,216,5300},
+    {255,236,219,5400},
+    {255,237,222,5500},
+    {255,239,225,5600},
+    {255,241,228,5700},
+    {255,243,231,5800},
+    {255,244,234,5900},
+    {255,246,237,6000},
+    {255,248,240,6100},
+    {255,249,242,6200},
+    {255,251,245,6300},
+    {255,253,248,6400},
+    {255,254,250,6500},
+    {255,255,255,6600}
   ],
 } %}
 
