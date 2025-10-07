@@ -884,24 +884,16 @@ If any is not true, return false.
 
 {%- macro chkK(_K) -%}
 {#- Is the Kelvin value in the Valid Range? 
-This will test that a number is a valid Kelvin number 1000 thru 40000.
+  This will test that a number is a valid Kelvin number 500 thru 40000.
 
-First we need to test that this is a number.
-Then we check if it 200 thru 6500.
-If all that is true return true.
-If any is not true, return false.
+  First we need to test that this is a number.
+  Then we check if it 500 thru 40,000.
+  If all that is true return true.
+  If any is not true, return false.
 
-NOTE: If you want to input Kelvin numbers that are out of range,
-  then uncomment the {{- true -}}  right before {% endmacro %}
+  NOTE: If you want to input Kelvin numbers that are out of range,
+    then uncomment the {{- true -}}  right before {% endmacro %}
     so that this only tests for a valid number.
-
-  SAMPLE USAGE:
-    {% from 'color_multi_tool.jinja' import chkK %}
-    {{ chkK(2000) | bool }}
-
-  REMEMBER:
-    This always returns text, so cast to bool on the other end to be
-    certain of the result.
 
   #### 🗿License Notice:
     * I & my license require attribution as a link back to the original should
@@ -922,7 +914,7 @@ NOTE: If you want to input Kelvin numbers that are out of range,
 
 
 {% macro rgb2k(rgbl) %}
-  {# This will return the Color Temperature Kelvin nased on the RGB value provided.
+  {# This will return the Color Temperature Kelvin based on the RGB value provided.
   Input value will be validated as a list of 3 integers between 0 & 255.
 
   Default output is 0, so if something goes wrong it will return 0.
@@ -932,11 +924,14 @@ NOTE: If you want to input Kelvin numbers that are out of range,
   The closest match code and the idea for this method is from:
   https://gist.github.com/xalbertoisorna October, 2025:
   https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
   These numbers were dropped in a table as a lookup and are polled
   based on a best match formula.
+
   That formula squares the difference for R, G, & B and adds them up,
   lowest score wins. The table is not continuous, it jumps 100 KELVIN at a
   time so there are some approximations going on here.
+  
   None of this color stuff is exact...
 
   SAMPLE USAGE:
