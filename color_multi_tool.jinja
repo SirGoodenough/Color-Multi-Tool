@@ -373,11 +373,14 @@
 {% macro hs2rgb(hsl) %}
 {#-
   This will return a CSV string that will convert to a list in the rgb format
-    from the xy list provided.
+    from the hs list provided.
+
   Be sure to convert this to a list when you use it on the other end
     because it arrives as a CSV string.
-  Code lifted directly from the Home Assistant core github November, 2023 at
-    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+
+  Code adaptation from https://github.com/jdepp236.
+  See https://github.com/SirGoodenough/Color-Multi-Tool/issues/11#issuecomment-3314419086
+
   Brightness is assumed to be 100%
 
   SAMPLE USAGE:
@@ -396,55 +399,39 @@
       expected to be followed & referenced
       as attribution should you use this code elsewhere.
 #}
-  {#- First a test to make sure input is valid #}
+    {#- First a test to make sure input is valid #}
 {%- if chkHS(hsl) | bool %}
-  {%- set fH = (hsl[0] | float(0)) %}
-  {%- set fS = (hsl[1] | float(0)) / 100 %}
-  {%- set fB = 1 %}
-  {%- if fS != 0.0 %}
-    {%- set r = 0 %}
-    {%- set g = 0 %}
-    {%- set b = 0 %}
-    {%- set h = fH / 60 %}
-    {%- set f = h - (h | round(1, 'floor')) %}
-    {%- set p = fB * (1 - fS) %}
-    {%- set q = fB * (1 - fS * f) %}
-    {%- set t = fB * (1 - (fS * (1 - f))) %}
-    {%- if h | int == 0 %}
-      {%- set r = (fB * 255) | int(0) %}
-      {%- set g = (t * 255) | int(0) %}
-      {%- set b = (p * 255) | int(0) %}
-    {%- elif h | int == 1 %}
-      {%- set r = (q * 255) | int(0) %}
-      {%- set g = (fB * 255) | int(0) %}
-      {%- set b = (p * 255) | int(0) %}
-    {%- elif h | int == 2 %}
-      {%- set r = (p * 255) | int(0) %}
-      {%- set g = (fB * 255) | int(0) %}
-      {%- set b = (t * 255) | int(0) %}
-    {%- elif h | int == 3 %}
-      {%- set r = (p * 255) | int(0) %}
-      {%- set g = (q * 255) | int(0) %}
-      {%- set b = (fB* 255) | int(0) %}
-    {%- elif h | int == 4 %}
-      {%- set r = (t * 255) | int(0) %}
-      {%- set g = (p * 255) | int(0) %}
-      {%- set b = (fB * 255) | int(0) %}
-    {%- elif h | int == 5 %}
-      {%- set r = (fB * 255) | int(0) %}
-      {%- set g = (p * 255) | int(0) %}
-      {%- set b = (q * 255) | int(0) %}
-    {%- endif %}
-    {%- set R = r | int(0) %}
-    {%- set G = g | int(0) %}
-    {%- set B = b | int(0) %}
+    {#- Correctly scale both H and S to the 0-1 range FIRST. V is assumed 1.0. -#}
+  {%- set h = (hsl[0] | float(0)) / 360 %}
+  {%- set s = (hsl[1] | float(0)) / 100 %}
+  {%- set v = 1.0 %}
+
+  {%- if s == 0.0 %}
+    {%- set r, g, b = v, v, v %}
   {%- else %}
-      {#- Color started as white #}
-    {%- set fV = (fB * 255) | int(0) %}
-    {%- set R = fV | int(0) %}
-    {%- set G = fV | int(0) %}
-    {%- set B = fV | int(0) %}
+    {%- set i = (h * 6.0) | int %}
+    {%- set f = (h * 6.0) - i %}
+    {%- set p = v * (1.0 - s) %}
+    {%- set q = v * (1.0 - s * f) %}
+    {%- set t = v * (1.0 - s * (1.0 - f)) %}
+    {%- if i == 0 %}
+      {%- set r, g, b = v, t, p %}
+    {%- elif i == 1 %}
+      {%- set r, g, b = q, v, p %}
+    {%- elif i == 2 %}
+      {%- set r, g, b = p, v, t %}
+    {%- elif i == 3 %}
+      {%- set r, g, b = p, q, v %}
+    {%- elif i == 4 %}
+      {%- set r, g, b = t, p, v %}
+    {%- else %}
+      {%- set r, g, b = v, p, q %}
+    {%- endif %}
   {%- endif %}
+    {#- Convert the final 0-1 values to 0-255 for RGB. -#}
+  {%- set R = (r * 255) | round(0) | int %}
+  {%- set G = (g * 255) | round(0) | int %}
+  {%- set B = (b * 255) | round(0) | int %}
 {%- else %}
     {#- Input was not valid #}
   {%- set R = 0 %}
@@ -715,8 +702,8 @@ Development credit to @123 on the
 {{- _hsl is list and
   _hsl | select('number') | list | count == 2 and
   _hsl | select('<', 0) | list | count == 0 and
-  _hsl[0] <= 100 and
-  _hsl[1] <= 360 -}}
+  _hsl[1] <= 100 and
+  _hsl[0] <= 360 -}}
 {%- endmacro %}
 
 {% macro chkNAME(color_name) %}

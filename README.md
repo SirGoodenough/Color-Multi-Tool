@@ -302,13 +302,24 @@ Another good thing to do before you ask for help is try testing what you have in
 
 ## `hs2rgb(hs_formatted_list)`
 
-  This will return a CSV string that will convert to a list in the rgb format from the xy list provided.
+  This will return a CSV string that will convert to a list in the rgb format
+    from the hs list provided.
 
-  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
 
-  Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  Code adaptation from https://github.com/jdepp236.
+  See https://github.com/SirGoodenough/Color-Multi-Tool/issues/11#issuecomment-3314419086
 
   Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import hs2rgb %}
+    {% set _hs2rgb = hs2rgb(hsl).split(",") | list %}
+    {{ [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
 
   SAMPLE USAGE:
 
