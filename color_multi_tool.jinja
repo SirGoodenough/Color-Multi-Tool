@@ -844,6 +844,58 @@ If any is not true, return false.
   {{ [red|int, green|int, blue|int] }}
 {% endmacro %}
 
+{% macro rgb_complement(rgbl) %}
+{#-
+  This will return a CSV string that is the complementary
+    of the rgb list provided. Complementary colors are pairs
+    of colors that, when combined or mixed, cancel each other
+    out by producing a grayscale color like white or black
+    This means that the light waves they produce together comprise
+    all of the visible wavelengths of light. On the color wheel,
+    complementary colors are located directly opposite each other.
+
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+    
+  Code lifted directly from the here October, 2025 at
+    https://rgbcolorpicker.com/complementary.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb_complement %}
+    {% set _rgb_c = rgb_complement(rgbl).split(",") | list %}
+    {{ [_rgb_c[0]|int(0),_rgb_c[1]|int(0),_rgb_c[2]|int(0)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+  {%- set r = rgbl[0] | int(0) %}
+  {%- set g = rgbl[1] | int(0) %}
+  {%- set b = rgbl[2] | int(0) %}
+  {%- if r + g + b != 0 %}
+    {#- Calculate the output #}
+    {%- set R = 255 - r | int(0) %}
+    {%- set G = 255 - g | int(0) %}
+    {%- set B = 255 - b | int(0) %}
+  {%- endif %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set R = 0 %}
+  {%- set G = 0 %}
+  {%- set B = 0 %}
+{%- endif %}
+{{- R -}},{{- G -}},{{- B -}}
+{%- endmacro %}
+
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
     (unless you want to add your own custom color that is...): #}
 {% set _nameMap = {
@@ -1451,14 +1503,14 @@ If any is not true, return false.
 TESTING CODE FOR DEVELOPER TAB TO TEST THIS CUSTOM JINJA:
 {% from 'color_multi_tool.jinja' import random_name, random_xy, random_hs,
 random_rgb, name2rgb, rgb2name, rgb2xy, xy2rgb, hs2rgb, rgb2hs, xy2hs, hs2xy, chkRGB,
-chkXY, chkHS, chkNAME, color_list %}
+chkXY, chkHS, rgb_complement, chkNAME, color_list, rgb_complement %}
 0 macro random name: {{ random_name() }}
 1 macro random xy list: {% set _rxy1 = random_xy().split(",") | list %}
 {%- set _rxy1_list = [_rxy1[0]|float|round(3),_rxy1[1]|float|round(3)] %}
 {{- _rxy1_list }}
 2 macro random hs list: {% set _rhs2 = random_hs().split(",") | list %}
 {%- set _rhs2_list =  [_rhs2[0]|float|round(3),_rhs2[1]|float|round(2)] %}
-{{- _rhs2_list }} 
+{{- _rhs2_list }}
 3 macro random rgb list: {% set _rrgb3 = random_rgb().split(",") | list %}
 {%- set _rrgb3_list = [_rrgb3[0]|int(0),_rrgb3[1]|int(0),_rrgb3[2]|int(0)] %}
 {{- _rrgb3_list }} 
@@ -1467,7 +1519,9 @@ chkXY, chkHS, chkNAME, color_list %}
 {%- set _nrgb4 = name2rgb(_nrgb4_name).split(",") | list %}
 {%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] | list %}
 {{- _nrgb4_name }} -> {{ _nrgb4_list }}
-B (using #4) macro RGB to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
+D (using #4) macro rgb_complement: {% set _rgb_c = rgb_complement(_nrgb4_list).split(",") | list %}
+{{- _nrgb4_list }} -> {{ _rgb_c }}
+B (using #4) macro rgb to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2name -}}
 5 (using #4) macro rgb to xy list: {% set _rgb2zy5 = rgb2xy(_nrgb4_list).split(",") | list %}
 {%- set _rgb2zy5_list = [_rgb2zy5[0]|float(0)|round(3),_rgb2zy5[1]|float(0)|round(3)] %}
