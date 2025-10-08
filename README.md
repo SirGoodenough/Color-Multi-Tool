@@ -180,8 +180,8 @@ Another good thing to do before you ask for help is try testing what you have in
 
   This template will accept a list representing an RGB value plus a range value representing the window size of the 'close enough' color name. It will return the Home Assistant Color name that matches it or is close to it within a +/- range you specify.
 
-- If you want only an exact match, then set the range to 0.
-- If you think that +10/-10 is close enough, then set the range to 10.
+  - If you want only an exact match, then set the range to 0.
+  - If you think that +10/-10 is close enough, then set the range to 10.
 
   For default the color is set to black [0,0,0] and the range is 0, so it will by give you ['black'] for invalid input.
 
@@ -190,6 +190,53 @@ Another good thing to do before you ask for help is try testing what you have in
   ```jinja
     {% from 'color_multi_tool.jinja' import rgb2name %}
     {{ rgb2name(10,rgbl) }}
+  ```
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+*********************
+
+# Return the dingle Closest Color Name for a Provided rgb Number
+
+## `rgb_bestname(rgbl)`
+
+  This will return a string that is the name in the HA table
+    closest to the rgb list provided based on the sum of the squared differences.
+
+  One valid color name will be returned.
+
+  For default the color is set to black [0,0,0] so it will
+    give you black for invalid input as well.
+
+  Code adapted from https://gist.github.com/xalbertoisorna here October, 2025:
+    https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+# Return the rgb Number that is Complementary to a provided rgb Number
+
+## `rgb_complement(rgbl)`
+
+  This will return a CSV string that is the complementary
+    of the rgb list provided. Complementary colors are pairs
+    of colors that, when combined or mixed, cancel each other
+    out by producing a grayscale color like white or black
+    This means that the light waves they produce together comprise
+    all of the visible wavelengths of light. On the color wheel,
+    complementary colors are located directly opposite each other.
+
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+
+  Code lifted directly from the here October, 2025 at
+    https://rgbcolorpicker.com/complementary.
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import rgb_bestname %}
+    {{ rgb_bestname(rgbl) }}
+    {% from 'color_multi_tool.jinja' import rgb_complement %}
+    {% set _rgb_c = rgb_complement(rgbl).split(",") | list %}
+    {{ [_rgb_c[0]|int(0),_rgb_c[1]|int(0),_rgb_c[2]|int(0)] }}
   ```
 
   REMEMBER:
@@ -255,13 +302,24 @@ Another good thing to do before you ask for help is try testing what you have in
 
 ## `hs2rgb(hs_formatted_list)`
 
-  This will return a CSV string that will convert to a list in the rgb format from the xy list provided.
+  This will return a CSV string that will convert to a list in the rgb format
+    from the hs list provided.
 
-  Be sure to convert this to a list when you use it on the other end because it arrives as a CSV string.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
 
-  Code lifted directly from the Home Assistant core github November, 2023 at https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  Code adaptation from https://github.com/jdepp236.
+  See https://github.com/SirGoodenough/Color-Multi-Tool/issues/11#issuecomment-3314419086
 
   Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import hs2rgb %}
+    {% set _hs2rgb = hs2rgb(hsl).split(",") | list %}
+    {{ [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
 
   SAMPLE USAGE:
 
