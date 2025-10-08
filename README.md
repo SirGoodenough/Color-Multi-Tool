@@ -418,6 +418,117 @@ Another good thing to do before you ask for help is try testing what you have in
 
 *********************
 
+# Return all of the color names in the official HA color list
+
+## `color_list()`
+
+  This will return all of the official color names recognized by Home Assistant
+    lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
+    and the Official CSS3 colors from w3.org:
+    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+    Names do not have spaces in them so that we can compare against
+    requests more easily (by removing spaces from the requests as well).
+    This lets "dark seagreen" and "dark sea green" both match the same
+    color "darkseagreen". 
+    You also get the RGB color code for each of the color names.
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import color_list() %}
+    {{- color_list().split('\n') | list -}}
+  ```
+
+*********************
+
+# Return KELVIN Color Temperature for a Provided rgb Number
+
+## `rgb2k(rgbl)`
+
+  This will return the Color Temperature Kelvin based on the RGB value provided.
+  Input value will be validated as a list of 3 integers between 0 & 255.
+
+  Default output is 0, so if something goes wrong it will return 0.
+
+  Converts from RGB to K, algorithm courtesy of 
+  http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/.
+  The closest match code and the idea for this method is from:
+  https://gist.github.com/xalbertoisorna October, 2025:
+  https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
+  These numbers were dropped in a table as a lookup and are polled
+  based on a best match formula.
+
+  That formula squares the difference for R, G, & B and adds them up,
+  lowest score wins. The table is not continuous, it jumps 100 KELVIN at a
+  time so there are some approximations going on here.
+
+  None of this color stuff is exact...
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import rgb2k %}
+    {{ rgb2k([51.255,255]) }}
+  ```
+
+*********************
+
+# Return the rgb Number for a Provided KELVIN Color Temperature
+
+## `k2rgb(colour_temperature)`
+
+  This will return and RGB list of the corresponding Color Temperature 
+  Kelvin value provided.
+
+  Value will be validated as a number 1000 thru 40000.
+
+  If you want to cheat with Kelvin values outside that range,
+  read the chkK(int) macro for instructionson doing this.
+
+  Converts from K to RGB, algorithm courtesy of 
+  http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+  This jinga adaptation courtesy [Didgeridrew](https://github.com/Didgeridrew)
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% set _k2rgb = k2rgb(kl).split(",") | list %}
+    {{ [_k2rgb[0]|int(0),_k2rgb[1]|int(0),_k2rgb[2]|int(0)] }}
+  ```
+
+*********************
+
+# Test if a list is a valid KELVIN Color Temperature 500 -> 40,000
+
+## `chkK(_K)`
+
+  Is the Kelvin value in the Valid Range? 
+  This will test that a number is a valid Kelvin number 500 thru 40'000.
+
+  First we need to test that this is a number.
+  Then we check if it 500 thru 40,000.
+  If all that is true return true.
+  If any is not true, return false.
+
+  NOTE: If you want to input Kelvin numbers that are out of range,
+    then uncomment the {{- true -}}  right before {% endmacro %}
+    so that this only tests for a valid number.
+
+  SAMPLE USAGE:
+
+  ```jinja
+    {% from 'color_multi_tool.jinja' import chkK %}
+    {{ chkK(2000) | bool }}
+  ```
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+*********************
+
 # Test if a list is a valid RGB color list
 
 ## `chkRGB(rgb_formatted_list)`
@@ -434,10 +545,10 @@ for help sorting this out.
 
   SAMPLE USAGE:
 
-```jinja
+  ```jinja
     {% from 'color_multi_tool.jinja' import chkRGB %}
     {{ chkRGB([255,165,0]) | bool }}
-```
+  ```
 
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
@@ -461,10 +572,10 @@ for help sorting this out.
 
   SAMPLE USAGE:
 
-```jinja
+  ```jinja
     {% from 'color_multi_tool.jinja' import chkXY %}
     {{ chkXY([0.497,0.472]) | bool }}
-```
+  ```
 
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
@@ -489,10 +600,10 @@ for help sorting this out.
 
   SAMPLE USAGE:
 
-```jinja
+  ```jinja
     {% from 'color_multi_tool.jinja' import chkHS %}
     {{ chkHS([38.824,100.0]) | bool }}
-```
+  ```
 
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
@@ -500,7 +611,9 @@ for help sorting this out.
 
 *********************
 
-## `chkNAME(color_name)`
+# Test if a Color name is in the official HA color list
+
+##  `chkNAME(color_name)`
 
 Is this color name on the official list?
 This will test a provided color name to see if it is on the HA color list.
@@ -521,28 +634,6 @@ If any is not true, return false.
   REMEMBER:
     This always returns text, so cast to bool on the other end to be
     certain of the result.
-
-*********************
-
-## `color_list()`
-
-  This will return all of the official color names recognized by Home Assistant
-    lifted directly from the Home Assistant core github November, 2023 at
-    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
-    and the Official CSS3 colors from w3.org:
-    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
-    Names do not have spaces in them so that we can compare against
-    requests more easily (by removing spaces from the requests as well).
-    This lets "dark seagreen" and "dark sea green" both match the same
-    color "darkseagreen". 
-    You also get the RGB color code for each of the color names.
-
-  SAMPLE USAGE:
-
-  ```jinja
-    {% from 'color_multi_tool.jinja' import color_list() %}
-    {{- color_list().split('\n') | list -}}
-  ```
 
 ### Other Info
 
@@ -577,3 +668,12 @@ BluePrint Library: https://github.com/SirGoodenough/HA_Blueprints/blob/master/RE
 ⚠️ **DANGER OF ELECTROCUTION** ⚠️
 
 If your device connects to mains electricity (AC power) there is danger of electrocution if not installed properly. If you don't know how to install it, please call an electrician (***Beware:*** certain countries prohibit installation without a licensed electrician present). Remember: **SAFETY FIRST**. It is not worth the risk to yourself, your family and your home if you don't know exactly what you are doing. Never tinker or try to flash a device using the serial programming interface while it is connected to MAINS ELECTRICITY (AC power).
+
+### 🗿License Notice:
+
+  * I & my license require attribution as a link back to the original should
+    you use this code in your own creation.
+  * Here is a link to my license & the original github post
+    https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+    expected to be followed & referenced
+    as attribution should you use this code elsewhere.
