@@ -844,26 +844,21 @@ If any is not true, return false.
   {{ [red|int, green|int, blue|int] }}
 {% endmacro %}
 
-{% macro rgb_complement(rgbl) %}
-{#-
-  This will return a CSV string that is the complementary
-    of the rgb list provided. Complementary colors are pairs
-    of colors that, when combined or mixed, cancel each other
-    out by producing a grayscale color like white or black
-    This means that the light waves they produce together comprise
-    all of the visible wavelengths of light. On the color wheel,
-    complementary colors are located directly opposite each other.
 
-  Be sure to convert this to a list when you use it on the other end
-    because it arrives as a CSV string.
-    
-  Code lifted directly from the here October, 2025 at
-    https://rgbcolorpicker.com/complementary.
+{% macro rgb_bestname(rgbl) %}
+{#-
+  This will return a string that is the name in the HA table
+    closest to the rgb list provided based on the sum of the squared differences. 
+
+  Code adapted from https://gist.github.com/xalbertoisorna here October, 2025:
+    https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
+  For default the color is set to black [0,0,0] so it will
+    give you black for invalid input as well.
 
   SAMPLE USAGE:
-    {% from 'color_multi_tool.jinja' import rgb_complement %}
-    {% set _rgb_c = rgb_complement(rgbl).split(",") | list %}
-    {{ [_rgb_c[0]|int(0),_rgb_c[1]|int(0),_rgb_c[2]|int(0)] }}
+    {% from 'color_multi_tool.jinja' import rgb_bestname %}
+    {{ rgb_bestname(rgbl) }}
 
   REMEMBER:
     Everything returned from a macro template is a string.
@@ -876,24 +871,29 @@ If any is not true, return false.
       expected to be followed & referenced
       as attribution should you use this code elsewhere.
 #}
-  {#- First a test to make sure input is valid #}
+
+    {#- Set defaults #}
+{%- set M = namespace(dist = 0, minDist = 200000, out = 'black', r = 0, g = 0, b = 0) %}
+    {#- First a test to make sure input is valid #}
 {%- if chkRGB(rgbl) | bool %}
-  {%- set r = rgbl[0] | int(0) %}
-  {%- set g = rgbl[1] | int(0) %}
-  {%- set b = rgbl[2] | int(0) %}
-  {%- if r + g + b != 0 %}
-    {#- Calculate the output #}
-    {%- set R = 255 - r | int(0) %}
-    {%- set G = 255 - g | int(0) %}
-    {%- set B = 255 - b | int(0) %}
+  {%- set M.r = rgbl[0] | int(0) %}
+  {%- set M.g = rgbl[1] | int(0) %}
+  {%- set M.b = rgbl[2] | int(0) %}
+  {%- if M.r + M.g + M.b != 0 %}
+    {#- Find the best matching color in the list. #}
+    {%- for best in _nameMap['_rgb'] %}
+    {#- Sum of the square of the differences of r, g, & b. Lowest is best match. #}
+      {%- set M.dist = (M.r-best.r)*(M.r-best.r)+(M.g-best.g)*(M.g-best.g)+(M.b-best.b)*(M.b-best.b) %}
+      {%- if M.dist < M.minDist %}
+        {%- set M.minDist = M.dist  %}
+        {%- set M.out = best.color %}
+      {%- endif %}
+    {%- endfor %}
   {%- endif %}
 {%- else %}
-    {#- Input was not valid #}
-  {%- set R = 0 %}
-  {%- set G = 0 %}
-  {%- set B = 0 %}
+  {%- set M.out = 'black' %}
 {%- endif %}
-{{- R -}},{{- G -}},{{- B -}}
+{{- M.out -}}
 {%- endmacro %}
 
 {#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
@@ -1503,7 +1503,7 @@ If any is not true, return false.
 TESTING CODE FOR DEVELOPER TAB TO TEST THIS CUSTOM JINJA:
 {% from 'color_multi_tool.jinja' import random_name, random_xy, random_hs,
 random_rgb, name2rgb, rgb2name, rgb2xy, xy2rgb, hs2rgb, rgb2hs, xy2hs, hs2xy, chkRGB,
-chkXY, chkHS, rgb_complement, chkNAME, color_list, rgb_complement %}
+chkXY, chkHS, chkNAME, color_list, rgb_bestname %}
 0 macro random name: {{ random_name() }}
 1 macro random xy list: {% set _rxy1 = random_xy().split(",") | list %}
 {%- set _rxy1_list = [_rxy1[0]|float|round(3),_rxy1[1]|float|round(3)] %}
@@ -1523,6 +1523,8 @@ D (using #4) macro rgb_complement: {% set _rgb_c = rgb_complement(_nrgb4_list).s
 {{- _nrgb4_list }} -> {{ _rgb_c }}
 B (using #4) macro rgb to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2name -}}
+E (using #4) macro rgb to Best Match Name: {%- set _rgb2Bname = rgb_bestname(_nrgb4_list) %}
+{{- _nrgb4_list }} -> {{ _rgb2Bname }}
 5 (using #4) macro rgb to xy list: {% set _rgb2zy5 = rgb2xy(_nrgb4_list).split(",") | list %}
 {%- set _rgb2zy5_list = [_rgb2zy5[0]|float(0)|round(3),_rgb2zy5[1]|float(0)|round(3)] %}
 {{- _nrgb4_list }} -> {{_rgb2zy5_list }}
