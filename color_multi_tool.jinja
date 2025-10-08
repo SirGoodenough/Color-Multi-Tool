@@ -1510,7 +1510,7 @@ chkXY, chkHS, chkNAME, color_list, rgb_bestname %}
 {{- _rxy1_list }}
 2 macro random hs list: {% set _rhs2 = random_hs().split(",") | list %}
 {%- set _rhs2_list =  [_rhs2[0]|float|round(3),_rhs2[1]|float|round(2)] %}
-{{- _rhs2_list }} 
+{{- _rhs2_list }}
 3 macro random rgb list: {% set _rrgb3 = random_rgb().split(",") | list %}
 {%- set _rrgb3_list = [_rrgb3[0]|int(0),_rrgb3[1]|int(0),_rrgb3[2]|int(0)] %}
 {{- _rrgb3_list }} 
@@ -1519,7 +1519,9 @@ chkXY, chkHS, chkNAME, color_list, rgb_bestname %}
 {%- set _nrgb4 = name2rgb(_nrgb4_name).split(",") | list %}
 {%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] | list %}
 {{- _nrgb4_name }} -> {{ _nrgb4_list }}
-B (using #4) macro RGB to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
+D (using #4) macro rgb_complement: {% set _rgb_c = rgb_complement(_nrgb4_list).split(",") | list %}
+{{- _nrgb4_list }} -> {{ _rgb_c }}
+B (using #4) macro rgb to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2name -}}
 E (using #4) macro rgb to Best Match Name: {%- set _rgb2Bname = rgb_bestname(_nrgb4_list) %}
 {{- _nrgb4_list }} -> {{ _rgb2Bname }}
