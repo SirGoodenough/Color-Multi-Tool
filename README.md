@@ -26,17 +26,13 @@ Documentation for this Custom Template can be found at:
 - The Description of each of the templates themselves.
 - The github readme: https://github.com/SirGoodenough/Color-Multi-Tool/blob/master/README.md.
 - Home Assistant Community Forum: https://community.home-assistant.io/t/color-multi-tool/659958.
+- A webpage and YouTube I did October/2025 https://whatarewefixing.today/2550/issue-resolution-of-my-template-macro-repos/
 
 This requires HomeAssistant version 2023.11.0 or greater due to the use of the list test in the code.
 
 # 🦠 TO-DO List
 
-- ~~Push to HACS Custom.~~
-- ~~Error checking inputs for range.~~
-- ~~Return a list of all the official color names.~~
-- ~~Clean-up code, add shortcuts on redundancies.~~
-- ~~Add ```Display closest color name to a given RGB```~~
-- ~~Push to Hacs released.~~
+- HEX conversions
 
 # 🔩 Installation
 
